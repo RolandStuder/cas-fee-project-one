@@ -18,12 +18,12 @@ div {
   font-weight: bold;
 }
 
-.textField {
+.text-field {
   /*width: 670px;*/
   width: 90%;
 }
 
-.dateField {
+.date-field {
   width: 150px;
 }
 
@@ -49,6 +49,6 @@ button {
   box-shadow: 5px 5px 5px lightsteelblue;
 }
 
-.smallField {
+.small-field {
   width: auto;
 }
