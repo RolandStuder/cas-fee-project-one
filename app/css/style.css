@@ -1,13 +1,14 @@
 body {
   border: solid thin black;
+  padding: 1em;
 }
 
 div {
   /*width: 700px;*/
-  padding: 5px;
+  padding: 1em;
 }
 
-.note {
+textarea.note {
   height: 200px;
 }
 
@@ -41,5 +42,19 @@ body:after {
 .label-field fieldset,
 .label-field textarea {
   flex: 1;
+}
+
+/* Note styles */
+
+.note {
+  margin: 1em 0em; 
+  padding: 1em;
+
+  border: 1px solid #eee;
+}
+
+.note h3, .note div, .note p {
+  margin: 0;
+  padding: 0;
 }
 
