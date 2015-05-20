@@ -1,0 +1,54 @@
+body {
+  width: auto;
+  /*height: 370px;*/
+  height: auto;
+  border: solid thin black;
+}
+
+div {
+  /*width: 700px;*/
+  padding: 5px;
+}
+
+.label {
+  width: 100px;
+  /*width: 8%;*/
+  text-align: left;
+  float: left;
+  font-weight: bold;
+}
+
+.textField {
+  /*width: 670px;*/
+  width: 90%;
+}
+
+.dateField {
+  width: 150px;
+}
+
+.note {
+  height: 200px;
+}
+
+/*commands position: bottom right*/
+.commands {
+  position: relative;
+  bottom: 30px;
+  right: 10px;
+}
+
+button {
+  width: 100px;
+  float: right;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.shadow {
+  box-shadow: 5px 5px 5px lightsteelblue;
+}
+
+.smallField {
+  width: auto;
+}

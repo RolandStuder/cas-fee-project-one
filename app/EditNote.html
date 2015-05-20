@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Note Pro</title>
+  <link href="css/style.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+<form method="get">
+  <div class="labelField">
+    <label class="label" for="title">Titel: </label>
+    <input class="textField shadow" type="text" id="title" />
+  </div>
+
+  <div class="labelField">
+    <label class="label" for="noteText">Notiz: </label>
+    <textarea class="textField note shadow" id="noteText"></textarea>
+  </div>
+
+  <div class="labelField">
+    <label class="label" for="Imortance1">Wichtigkeit: </label>
+
+    <fieldset class="shadow smallField">
+
+      <input type="radio" name="importance" id="Imortance1" value="1" checked="checked"/>
+      <label for="Imortance1">1</label>
+
+      <input type="radio" name="importance" id="Imortance2" value="2" />
+      <label for="Imortance1">2</label>
+
+      <input type="radio" name="importance" id="Imortance3" value="3" />
+      <label for="Imortance1">3</label>
+
+      <input type="radio" name="importance" id="Imortance4" value="4" />
+      <label for="Imortance1">4</label>
+
+      <input type="radio" name="importance" id="Imortance5" value="5" />
+      <label for="Imortance1">5</label>
+    </fieldset>
+  </div>
+
+  <div class="labelField">
+    <label class="label" for="due">Erledigt bis: </label>
+    <input type="date" class="dateField shadow smallField" id="due" />
+  </div>
+
+  <div class="commands">
+    <button>Cancel</button>
+    <button>Speichern</button>
+
+  </div>
+
+</form>
+
+</body>
+</html>
