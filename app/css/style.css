@@ -1,7 +1,4 @@
 body {
-  width: auto;
-  /*height: 370px;*/
-  height: auto;
   border: solid thin black;
 }
 
@@ -10,32 +7,8 @@ div {
   padding: 5px;
 }
 
-.label {
-  width: 100px;
-  /*width: 8%;*/
-  text-align: left;
-  float: left;
-  font-weight: bold;
-}
-
-.text-field {
-  /*width: 670px;*/
-  width: 90%;
-}
-
-.date-field {
-  width: 150px;
-}
-
 .note {
   height: 200px;
-}
-
-/*commands position: bottom right*/
-.commands {
-  position: relative;
-  bottom: 30px;
-  right: 10px;
 }
 
 button {
@@ -45,10 +18,28 @@ button {
   border-radius: 10px;
 }
 
+body:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
 .shadow {
   box-shadow: 5px 5px 5px lightsteelblue;
 }
 
-.small-field {
-  width: auto;
+
+.label-field {
+  display: flex;
 }
+
+.label-field label {
+  width: 5em;
+}
+
+.label-field input,
+.label-field fieldset,
+.label-field textarea {
+  flex: 1;
+}
+
