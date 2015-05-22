@@ -19,12 +19,6 @@ button {
   border-radius: 10px;
 }
 
-body:after {
-  content: "";
-  display: block;
-  clear: both;
-}
-
 .shadow {
   box-shadow: 5px 5px 5px lightsteelblue;
 }
