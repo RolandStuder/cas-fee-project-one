@@ -92,7 +92,7 @@ function padLeft(toPad, targetLength, padChar) {
  */
 function initialize() {
 
-    var id = Number(getParameterFromSearchString(window.location.search, "id"));
+    var id = Number(getParameterFromSearchString(window.location.search, "id", 0));
     var note = Note.getNote(id);
 
     setNote(note);
