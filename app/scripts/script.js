@@ -66,12 +66,12 @@ function renderList() {
 
 function renderNote(note) {
   var element = createTag('div', '' ,{class: 'note'});
-
-  element.appendChild( createTag('h3', note.title));
-  element.appendChild( createTag('div', note.completion, {class: 'note-completion'}))
-  element.appendChild( createTag('div', note.date, {class: 'note-date'}))
-  element.appendChild( createTag('p', note.description, {class: 'note-description'}))
-  element.appendChild( createTag('a', 'Edit', {href: 'EditNote.html'}))
+  element.appendChild(createTag('a', '', {href: 'EditNote.html'}));
+  var childNode = element.childNodes[0];
+  childNode.appendChild( createTag('h3', note.title));
+  childNode.appendChild( createTag('div', note.completion, {class: 'note-completion'}))
+  childNode.appendChild( createTag('div', note.date, {class: 'note-date'}));
+  childNode.appendChild( createTag('p', note.description, {class: 'note-description'}))
   document.getElementsByTagName('main')[0].appendChild(element);
 }
 
