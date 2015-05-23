@@ -8,9 +8,9 @@
 function Note(title, description, importance, due, completed) {
     this.title = title;
     this.description = description;
-    this.importance = importance;
-    this.due = due;
-    this.completed = completed;
+    this.importance = Number(importance);
+    this.due = new Date(due);
+    this.completed = Boolean(completed);
 }
 
 // Static Note method to create an initial array of notes.
@@ -29,7 +29,7 @@ Note.readNotes = function () {
     if (notesString != null) {
         var notesArray = JSON.parse(notesString);
         notesArray.forEach(function (noteElement) {
-            var note = new Note(noteElement.title, noteElement.description, noteElement.importance, noteElement.due, noteElement.completed);
+            var note = new Note(noteElement.title, noteElement.description, noteElement.importance, new Date(noteElement.due), noteElement.completed);
             notes.push(note);
         });
     }
@@ -51,6 +51,31 @@ Note.writeNotes = function (notes) {
     localStorage.setItem(Note.constants.notesKey, notesString);
 };
 
+// Static  Note method to get a note for a given id.
+Note.getNote = function(id) {
+    var notes = Note.readNotes();
+
+    if (id >= notes.length) {
+        throw "Invalid note id: " + id;
+    }
+
+    return notes[id];
+}
+
+// Static  Note method to set a note for a given id.
+Note.setNote = function(id, note) {
+    var notes = Note.readNotes();
+
+    if (id >= notes.length) {
+        throw "Invalid note id: " + id;
+    }
+
+    notes[id] = note;
+    Note.writeNotes(notes);
+
+}
+
+
 // Constants of the Note class.
 Note.constants = {
     notesKey: "notes"
@@ -71,6 +96,12 @@ function TestNote() {
 
     var notes2 = Note.readNotes();
 
+    var n4 = Note.getNote(2);
+    n4.title = "test";
+    Note.setNote(2, n4);
+    var n5 = Note.getNote(2);
+
+
 }
 
-TestNote();
+//TestNote();
