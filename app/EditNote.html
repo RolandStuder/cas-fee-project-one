@@ -3,7 +3,7 @@
 <head lang="en">
   <meta charset="UTF-8">
   <title>Note Pro</title>
-  <link href="css/style.css" type="text/css" rel="stylesheet" />
+  <link href="css/style.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
 <header>
@@ -18,34 +18,34 @@
 
   <div class="label-field">
     <textarea class="text-field shadow" id="note-text" required></textarea>
-    <label class="label" for="note-text">Notiz: </label>
+    <label class="label" for="note-text">Notiz</label>
   </div>
 
   <div class="label-field">
-    <label class="label" for="importance-1">Wichtigkeit: </label>
+    <label class="label" for="importance-1">Wichtigkeit</label>
 
     <fieldset class="shadow small-field">
 
       <input type="radio" name="importance" id="importance-1" value="1" checked="checked"/>
       <label for="importance-1">1</label>
 
-      <input type="radio" name="importance" id="importance-2" value="2" />
+      <input type="radio" name="importance" id="importance-2" value="2"/>
       <label for="importance-2">2</label>
 
-      <input type="radio" name="importance" id="importance-3" value="3" />
+      <input type="radio" name="importance" id="importance-3" value="3"/>
       <label for="importance-3">3</label>
 
-      <input type="radio" name="importance" id="importance-4" value="4" />
+      <input type="radio" name="importance" id="importance-4" value="4"/>
       <label for="importance-4">4</label>
 
-      <input type="radio" name="importance" id="importance-5" value="5" />
+      <input type="radio" name="importance" id="importance-5" value="5"/>
       <label for="importance-5">5</label>
     </fieldset>
   </div>
 
   <div class="label-field">
     <input type="date" class="date-field shadow small-field" id="due" required value=""/>
-    <label class="label" for="due">Erledigt bis: </label>
+    <label class="label" for="due">Erledigt bis</label>
   </div>
 
   <div class="commands">
@@ -54,6 +54,7 @@
   </div>
 
 </form>
-<script src="scripts/script.js" type="text/javascript"></script>
+  <script src="scripts/note.js" type="text/javascript"></script>
+  <script src="scripts/editNote.js" type="text/javascript"></script>
 </body>
 </html>
