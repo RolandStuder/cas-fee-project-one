@@ -6,19 +6,23 @@
   <link href="css/style.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
+<header>
+  <h1>Notes</h1>
+</header>
+
 <form method="get">
   <div class="label-field">
-    <label class="label" for="title">Titel: </label>
-    <input class="text-field shadow" type="text" id="title"/>
+    <input class="text-field shadow" type="text" id="title" required />
+    <label class="label" for="title">Titel</label>
   </div>
 
   <div class="label-field">
-    <label class="label" for="note-text">Notiz: </label>
-    <textarea class="text-field note shadow" id="note-text"></textarea>
+    <textarea class="text-field shadow" id="note-text" required></textarea>
+    <label class="label" for="note-text">Notiz</label>
   </div>
 
   <div class="label-field">
-    <label class="label" for="importance-1">Wichtigkeit: </label>
+    <label class="label" for="importance-1">Wichtigkeit</label>
 
     <fieldset class="shadow small-field">
 
@@ -40,8 +44,8 @@
   </div>
 
   <div class="label-field">
-    <label class="label" for="due">Erledigt bis: </label>
-    <input type="date" class="date-field shadow small-field" id="due"/>
+    <input type="date" class="date-field shadow small-field" id="due" required value=""/>
+    <label class="label" for="due">Erledigt bis</label>
   </div>
 
   <div class="commands">

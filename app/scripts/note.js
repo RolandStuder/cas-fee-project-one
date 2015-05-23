@@ -37,6 +37,14 @@ Note.readNotes = function () {
     return notes;
 };
 
+
+// Method that takes an object and adds the note to the local storage
+Note.insertNote = function(note) {
+    var notes = Note.readNotes();
+    notes.push(note);
+    Note.writeNotes(notes);
+}
+
 // Static Note method to write an array of notes to the local storage.
 Note.writeNotes = function (notes) {
     var notesString = JSON.stringify(notes);
