@@ -14,8 +14,8 @@ function setNote(note) {
     
     document.getElementById("due").value = 
         note.due.getFullYear() + "-" +
-        padLeft((note.due.getMonth() + 1), 2, "0") + "-" +
-        padLeft(note.due.getDate(), 2, "0");
+        padLeft(String((note.due.getMonth() + 1)), 2, "0") + "-" +
+        padLeft(String(note.due.getDate()), 2, "0");
 
     document.getElementById("importance-" + note.importance).checked = true;
 }
@@ -54,10 +54,10 @@ function getParameterFromSearchString(searchString, key, defaultValue) {
             return keyValuePair.key === key;
         });
 
-    if (resultKeyValuePairs.length == 1) {
+    if (resultKeyValuePairs.length === 1) {
         return resultKeyValuePairs[0].value;
     }
-    else if (resultKeyValuePairs.length == 0) {
+    else if (resultKeyValuePairs.length === 0) {
         if (defaultValue !== undefined) {
             return defaultValue;
         }
@@ -74,7 +74,7 @@ function getParameterFromSearchString(searchString, key, defaultValue) {
  * Left string padding.
  *
  * @param {String} toPad - The string to pad.
- * @param {String} targetLength - The final length of padded string.
+ * @param {Number} targetLength - The final length of padded string.
  * @param {String} padChar - The char to pad with.
  *
  */
@@ -92,7 +92,7 @@ function padLeft(toPad, targetLength, padChar) {
  */
 function initialize() {
 
-    var id = Number(getParameterFromSearchString(window.location.search, "id", 0));
+    var id = Number(getParameterFromSearchString(window.location.search, "id", "0"));
     var note = Note.getNote(id);
 
     setNote(note);
