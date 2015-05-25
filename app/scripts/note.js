@@ -58,6 +58,11 @@ Note.readNotes = function () {
         });
     }
 
+    if(notes.length === 0) {
+        notes = Note.createInitialNotes();
+        Note.writeNotes(notes);
+    }
+
     return notes;
 };
 

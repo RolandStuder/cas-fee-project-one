@@ -9,10 +9,10 @@
  */
 function setNote(note) {
 
-    document.getElementById("title").value = note.title;
-    document.getElementById("note-text").value = note.description;
-    
-    document.getElementById("due").value = 
+    titleElement().value = note.title;
+    descriptionElement().value = note.description;
+
+    dueElement().value =
         note.due.getFullYear() + "-" +
         padLeft(String((note.due.getMonth() + 1)), 2, "0") + "-" +
         padLeft(String(note.due.getDate()), 2, "0");
@@ -26,11 +26,22 @@ function setNote(note) {
  * @param {Note} note - The destination note.
  */
 function getNote(note) {
-    note.title = document.getElementById("title").value;
-    note.description = document.getElementById("note-text").value;
-    note.due = new Date(document.getElementById("due").value);
+    note.title = titleElement().value;
+    note.description = descriptionElement().value;
+    note.due = new Date(dueElement().value);
     note.importance = Number(document.querySelector('input[name="importance"]:checked').value);
 }
+
+function titleElement() {
+    return document.getElementById("title");
+}
+function descriptionElement() {
+    return document.getElementById("note-text");
+}
+function dueElement() {
+    return document.getElementById("due");
+}
+
 
 /**
  * Left string padding.
@@ -46,6 +57,23 @@ function padLeft(toPad, targetLength, padChar) {
         result = padChar + result;
     }
     return result;
+}
+
+function validate() {
+    if(titleElement().value == "") {
+        titleElement().placeholder = "Titel muss eingegeben werden";
+        titleElement().focus();
+        return false;
+    }
+    if(isNaN(new Date(dueElement().value).getTime())) {
+        dueElement().placeholder = "Ungültiges Datum. Erwartetes Format: YYYY-MM-DD";
+        dueElement().focus();
+        return false;
+    }
+
+
+    return true;
+
 }
 
 /**
@@ -69,9 +97,11 @@ function initialize() {
     }
 
     document.getElementById("save").onclick = function() {
-        getNote(note);
-        Note.setNote(Number(id), note);
-        backToStartPage();
+        if(validate()) {
+            getNote(note);
+            Note.setNote(Number(id), note);
+            backToStartPage();
+        }
     };
 
     document.getElementById("cancel").onclick = backToStartPage;
