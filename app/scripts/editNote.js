@@ -5,7 +5,7 @@
 /**
  * Sets the note input fields from a Note instance.
  *
- * @param {Note} note - The source note.
+ * @param {Note} note The source note.
  */
 function setNote(note) {
 
@@ -32,50 +32,12 @@ function getNote(note) {
     note.importance = Number(document.querySelector('input[name="importance"]:checked').value);
 }
 
-
-/**
- * Extracts from a GET search string a value for a given key.
- *
- * @param {String} searchString - The input search string.
- * @param {String} key - The key.
- * @param {String} defaultValue - The value to return if the key is not found in the search string.
- *
- */
-function getParameterFromSearchString(searchString, key, defaultValue) {
-    var noQuestionMark = searchString.substr(1);
-    var keyValuePairs = noQuestionMark.split("&");
-
-    var resultKeyValuePairs = keyValuePairs
-        .map(function (keyValuePair) {
-            var keyAndValue = keyValuePair.split("=");
-            return {key: keyAndValue[0], value: keyAndValue.length === 2 ? keyAndValue[1] : undefined};
-        })
-        .filter(function (keyValuePair) {
-            return keyValuePair.key === key;
-        });
-
-    if (resultKeyValuePairs.length === 1) {
-        return resultKeyValuePairs[0].value;
-    }
-    else if (resultKeyValuePairs.length === 0) {
-        if (defaultValue !== undefined) {
-            return defaultValue;
-        }
-        else {
-            throw "Key " + key + " not found in search string"
-        }
-    }
-    else {
-        throw "Key " + key + " not unique in search string"
-    }
-}
-
 /**
  * Left string padding.
  *
- * @param {String} toPad - The string to pad.
- * @param {Number} targetLength - The final length of padded string.
- * @param {String} padChar - The char to pad with.
+ * @param {string} toPad The string to pad.
+ * @param {number} targetLength The final length of padded string.
+ * @param {string} padChar The char to pad with.
  *
  */
 function padLeft(toPad, targetLength, padChar) {
@@ -88,28 +50,60 @@ function padLeft(toPad, targetLength, padChar) {
 
 /**
  * Page initialization.
- *
  */
 function initialize() {
 
-    var id = Number(getParameterFromSearchString(window.location.search, "id", "0"));
+    var id = 0;
+    var parameters = getParametersFromSearchString(window.location.search);
+
+    if("id" in parameters) {
+        id = parameters.id;
+    }
+
     var note = Note.getNote(id);
 
     setNote(note);
 
     function backToStartPage() {
-        window.location.replace("index.html")
+        window.location.replace("index.html");
     }
 
     document.getElementById("save").onclick = function() {
         getNote(note);
-        Note.setNote(id, note);
+        Note.setNote(Number(id), note);
         backToStartPage();
     };
 
     document.getElementById("cancel").onclick = backToStartPage;
 
+    function toggleColor(element) {
+        if(element.style.backgroundColor == "") {
+            element.style.backgroundColor = "black";
+        }
+        else {
+            element.style.backgroundColor = "";
+        }
+
+        if(element.style.color == "") {
+            element.style.color = "white";
+        }
+        else {
+            element.style.color = "";
+        }
+    }
+
+    function setStyle() {
+        var elements = document.getElementsByTagName("*");
+        [].slice.call(elements).forEach(function(element) {toggleColor(element)});
+    }
+
+    document.getElementById("style").onclick = setStyle;
+
 }
 
-
-initialize();
+try {
+    initialize();
+}
+catch(exception) {
+    alert("Es ist ein Fehler aufgetreten:\n" + exception.toString());
+}

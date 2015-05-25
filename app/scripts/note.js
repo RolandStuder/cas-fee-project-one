@@ -5,6 +5,18 @@
  */
 
 // Note constructor.
+
+
+/**
+ * Note constructor.
+ *
+ * @param {string} title The title of the note.
+ * @param {string} description
+ * @param {number} importance
+ * @param {Date} due
+ * @param {boolean} completed
+ * @constructor
+ */
 function Note(title, description, importance, due, completed) {
     this.title = title;
     this.description = description;
@@ -13,7 +25,13 @@ function Note(title, description, importance, due, completed) {
     this.completed = Boolean(completed);
 }
 
-// Static Note method to create an initial array of notes.
+// .
+
+/**
+ * Static Note method to create an initial array of notes.
+ *
+ * @returns {Note[]}
+ */
 Note.createInitialNotes = function () {
     var notes = [];
     notes.push(new Note("Title1", "Description1", 3, new Date(), false));
@@ -23,6 +41,12 @@ Note.createInitialNotes = function () {
 };
 
 // Static Note method to read an array of notes from the local storage.
+
+/**
+ * Static Note method to read an array of notes from the local storage.
+ *
+ * @returns {Note[]} The notes from the local storage.
+ */
 Note.readNotes = function () {
     var notes = [];
     var notesString = localStorage.getItem(Note.constants.notesKey);
@@ -37,21 +61,34 @@ Note.readNotes = function () {
     return notes;
 };
 
-
-// Method that takes an object and adds the note to the local storage
+/**
+ * Method that takes an Note and adds the note to the local storage.
+ * @param note {Note} The note to add.
+ */
 Note.insertNote = function(note) {
     var notes = Note.readNotes();
     notes.push(note);
     Note.writeNotes(notes);
-}
+};
 
-// Static Note method to write an array of notes to the local storage.
+/**
+ * Static Note method to store an array of notes in the local storage.
+ *
+ * @param notes {Note[]} The notes to store.
+ */
 Note.writeNotes = function (notes) {
     var notesString = JSON.stringify(notes);
     localStorage.setItem(Note.constants.notesKey, notesString);
 };
 
-// Static  Note method to get a note for a given id.
+//
+
+/**
+ * Static Note method to get a note from the local storage for a given id.
+ *
+ * @param {number} id The id of the note.
+ * @returns {Note} The note.
+ */
 Note.getNote = function(id) {
     var notes = Note.readNotes();
 
@@ -60,9 +97,14 @@ Note.getNote = function(id) {
     }
 
     return notes[id];
-}
+};
 
-// Static  Note method to set a note for a given id.
+/**
+ * Static  Note method to store a note in the local storage for a given id.
+ *
+ * @param id {number} The id of the note.
+ * @param note {Note} The note to store.
+ */
 Note.setNote = function(id, note) {
     var notes = Note.readNotes();
 
@@ -73,16 +115,22 @@ Note.setNote = function(id, note) {
     notes[id] = note;
     Note.writeNotes(notes);
 
-}
+};
 
-
-// Constants of the Note class.
+/**
+ * Constant values of the Note class.
+ *
+ * @type {{notesKey: string}}
+ */
 Note.constants = {
     notesKey: "notes"
 };
 
-
-function TestNote() {
+//noinspection JSUnusedGlobalSymbols
+/**
+ * Tests for the Note class.
+ */
+function testNote() {
 
     localStorage.clear();
 
@@ -94,14 +142,16 @@ function TestNote() {
 
     Note.writeNotes(notes);
 
+    //noinspection JSUnusedLocalSymbols
     var notes2 = Note.readNotes();
 
     var n4 = Note.getNote(2);
     n4.title = "test";
     Note.setNote(2, n4);
+    //noinspection JSUnusedLocalSymbols
     var n5 = Note.getNote(2);
 
 
 }
 
-//TestNote();
+//testNote();
