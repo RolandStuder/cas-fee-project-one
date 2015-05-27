@@ -5,17 +5,17 @@
 /**
  * Sets the note input fields from a Note instance.
  *
- * @param {Note} note - The source note.
+ * @param {Note} note The source note.
  */
 function setNote(note) {
 
-    document.getElementById("title").value = note.title;
-    document.getElementById("note-text").value = note.description;
-    
-    document.getElementById("due").value = 
+    titleElement().value = note.title;
+    descriptionElement().value = note.description;
+
+    dueElement().value =
         note.due.getFullYear() + "-" +
-        padLeft((note.due.getMonth() + 1), 2, "0") + "-" +
-        padLeft(note.due.getDate(), 2, "0");
+        padLeft(String((note.due.getMonth() + 1)), 2, "0") + "-" +
+        padLeft(String(note.due.getDate()), 2, "0");
 
     document.getElementById("importance-" + note.importance).checked = true;
 }
@@ -26,56 +26,29 @@ function setNote(note) {
  * @param {Note} note - The destination note.
  */
 function getNote(note) {
-    note.title = document.getElementById("title").value;
-    note.description = document.getElementById("note-text").value;
-    note.due = new Date(document.getElementById("due").value);
+    note.title = titleElement().value;
+    note.description = descriptionElement().value;
+    note.due = new Date(dueElement().value);
     note.importance = Number(document.querySelector('input[name="importance"]:checked').value);
 }
 
-
-/**
- * Extracts from a GET search string a value for a given key.
- *
- * @param {String} searchString - The input search string.
- * @param {String} key - The key.
- * @param {String} defaultValue - The value to return if the key is not found in the search string.
- *
- */
-function getParameterFromSearchString(searchString, key, defaultValue) {
-    var noQuestionMark = searchString.substr(1);
-    var keyValuePairs = noQuestionMark.split("&");
-
-    var resultKeyValuePairs = keyValuePairs
-        .map(function (keyValuePair) {
-            var keyAndValue = keyValuePair.split("=");
-            return {key: keyAndValue[0], value: keyAndValue.length === 2 ? keyAndValue[1] : undefined};
-        })
-        .filter(function (keyValuePair) {
-            return keyValuePair.key === key;
-        });
-
-    if (resultKeyValuePairs.length == 1) {
-        return resultKeyValuePairs[0].value;
-    }
-    else if (resultKeyValuePairs.length == 0) {
-        if (defaultValue !== undefined) {
-            return defaultValue;
-        }
-        else {
-            throw "Key " + key + " not found in search string"
-        }
-    }
-    else {
-        throw "Key " + key + " not unique in search string"
-    }
+function titleElement() {
+    return document.getElementById("title");
 }
+function descriptionElement() {
+    return document.getElementById("note-text");
+}
+function dueElement() {
+    return document.getElementById("due");
+}
+
 
 /**
  * Left string padding.
  *
- * @param {String} toPad - The string to pad.
- * @param {String} targetLength - The final length of padded string.
- * @param {String} padChar - The char to pad with.
+ * @param {string} toPad The string to pad.
+ * @param {number} targetLength The final length of padded string.
+ * @param {string} padChar The char to pad with.
  *
  */
 function padLeft(toPad, targetLength, padChar) {
@@ -86,30 +59,81 @@ function padLeft(toPad, targetLength, padChar) {
     return result;
 }
 
+function validate() {
+    if(titleElement().value == "") {
+        titleElement().placeholder = "Titel muss eingegeben werden";
+        titleElement().focus();
+        return false;
+    }
+    if(isNaN(new Date(dueElement().value).getTime())) {
+        dueElement().placeholder = "Ung�ltiges Datum. Erwartetes Format: YYYY-MM-DD";
+        dueElement().focus();
+        return false;
+    }
+
+
+    return true;
+
+}
+
 /**
  * Page initialization.
- *
  */
 function initialize() {
 
-    var id = Number(getParameterFromSearchString(window.location.search, "id", 0));
+    var id = 0;
+    var parameters = getParametersFromSearchString(window.location.search);
+
+    if("id" in parameters) {
+        id = parameters.id;
+    }
+
     var note = Note.getNote(id);
 
     setNote(note);
 
     function backToStartPage() {
-        window.location.replace("index.html")
+        window.location.replace("index.html");
     }
 
     document.getElementById("save").onclick = function() {
-        getNote(note);
-        Note.setNote(id, note);
-        backToStartPage();
+        if(validate()) {
+            getNote(note);
+            Note.setNote(Number(id), note);
+            backToStartPage();
+        }
     };
 
     document.getElementById("cancel").onclick = backToStartPage;
 
+    function toggleColor(element) {
+        if(element.style.backgroundColor == "") {
+            element.style.backgroundColor = "black";
+        }
+        else {
+            element.style.backgroundColor = "";
+        }
+
+        if(element.style.color == "") {
+            element.style.color = "white";
+        }
+        else {
+            element.style.color = "";
+        }
+    }
+
+    function setStyle() {
+        var elements = document.getElementsByTagName("*");
+        [].slice.call(elements).forEach(function(element) {toggleColor(element)});
+    }
+
+    document.getElementById("style").onclick = setStyle;
+
 }
 
-
-initialize();
+try {
+    initialize();
+}
+catch(exception) {
+    alert("Es ist ein Fehler aufgetreten:\n" + exception.toString());
+}

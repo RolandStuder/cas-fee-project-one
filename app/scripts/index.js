@@ -13,13 +13,14 @@ function submitNote(event) {
 function renderList() {
     var notes = JSON.parse(localStorage.getItem('notes'));
     for (var i = 0; i < notes.length; i++) {
-        renderNote(notes[i]);
+        renderNote(notes[i],i);
     }
 }
 
-function renderNote(note) {
+function renderNote(note,id) {
     var element = createTag('div', '' ,{class: 'note'});
-    element.appendChild(createTag('a', '', {href: 'EditNote.html'}));
+    var href = 'editNote.html?id='+id;
+    element.appendChild(createTag('a', '', {href: href}));
     var childNode = element.childNodes[0];
     childNode.appendChild( createTag('h3', note.title));
     childNode.appendChild( createTag('div', note.completion, {class: 'note-completion'}))
