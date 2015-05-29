@@ -81,14 +81,20 @@ function validate() {
  */
 function initialize() {
 
+    var noteStorage = new NoteStorage();
+
     var id = 0;
     var parameters = getParametersFromSearchString(window.location.search);
 
+    var note;
+
     if("id" in parameters) {
         id = parameters.id;
+        note = noteStorage.getNote(Number(parameters.id));
     }
-
-    var note = Note.getNote(id);
+    else {
+        note = noteStorage.getNewNote();
+    }
 
     setNote(note);
 
@@ -99,7 +105,7 @@ function initialize() {
     document.getElementById("save").onclick = function() {
         if(validate()) {
             getNote(note);
-            Note.setNote(Number(id), note);
+            noteStorage.putNote(note);
             backToStartPage();
         }
     };

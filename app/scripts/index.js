@@ -11,15 +11,16 @@ function submitNote(event) {
 }
 
 function renderList() {
-    var notes = JSON.parse(localStorage.getItem('notes'));
-    for (var i = 0; i < notes.length; i++) {
-        renderNote(notes[i],i);
-    }
+    var noteStorage = new NoteStorage();
+    var notes = noteStorage.readNotes();
+    notes.forEach(function(note) {
+        renderNote(note);
+    });
 }
 
-function renderNote(note,id) {
+function renderNote(note) {
     var element = createTag('div', '' ,{class: 'note'});
-    var href = 'editNote.html?id='+id;
+    var href = 'editNote.html?id='+ note.id;
     element.appendChild(createTag('a', '', {href: href}));
     var childNode = element.childNodes[0];
     childNode.appendChild( createTag('h3', note.title));
@@ -42,6 +43,10 @@ function createTag(tagName, content, attributes) {
     }
     return element;
 }
+
+document.getElementById("newNote").onclick = function() {
+    window.location.replace('editNote.html')
+};
 
 // execute on load
 renderList();
