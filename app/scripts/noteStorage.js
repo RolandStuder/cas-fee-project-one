@@ -96,8 +96,8 @@ function NoteStorage() {
         return localStorage.getItem(notesKey) != null;
     }
 
-    var notesKey = "notes";
-    var noteIdKey = "notesNextId";
+    var notesKey = "noteStorage";
+    var noteIdKey = "notesStorageNextId";
 
     function createInitialNotes() {
         for(var iNote = 0; iNote < 3; iNote++) {
