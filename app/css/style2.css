@@ -1,0 +1,54 @@
+body {
+  border: solid thin black;
+  padding: 1em;
+}
+
+div {
+  /*width: 700px;*/
+  padding: 1em;
+}
+
+textarea.note {
+  height: 200px;
+}
+
+button {
+  width: 100px;
+  float: right;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.shadow {
+  box-shadow: 5px 5px 5px lightsteelblue;
+}
+
+
+.label-field {
+  display: flex;
+}
+
+.label-field label {
+  width: 5em;
+}
+
+.label-field input,
+.label-field fieldset,
+.label-field textarea {
+  flex: 1;
+}
+
+/* Note styles */
+
+.note {
+  margin: 1em 0em; 
+  padding: 1em;
+
+  border: 1px solid #eee;
+}
+
+.note h3, .note div, .note p {
+  margin: 0;
+  padding: 0;
+}
+
