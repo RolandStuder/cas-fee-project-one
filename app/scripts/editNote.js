@@ -82,6 +82,12 @@ function padLeft(toPad, targetLength, padChar) {
     return result;
 }
 
+/**
+ * Parses a date string of format YYYY-MM-DD or DD.MM.YYYY
+ *
+ * @param {string} dateString The string to parse.
+ * @returns {Date} The parsed date or null if the date string is invalid.
+ */
 function parseDateString(dateString) {
     var date = new Date(dateString);
 
@@ -97,6 +103,12 @@ function parseDateString(dateString) {
     }
     return date;
 }
+
+/**
+ * Validates the inputs.
+ *
+ * @returns {boolean} true if valid, false if invalid.
+ */
 function validate() {
     if ($(titleElement()).val() === "") {
         $('#title-error').html("Titel muss eingegeben werden");
@@ -122,13 +134,15 @@ function validate() {
 function initialize() {
 
 
+    // Command intialization (uses handlebar).
+
     function initializeCommands() {
 
         // The available commands.
         var commands = [
             {'commandId' : 'save', 'caption' : 'Speichern', click : save},
             {'commandId' : 'toggle-style', 'caption' : 'Toggle Style', click : toggleStyle},
-            {'commandId' : 'cancel', 'caption' : 'Abbruch', click : backToStartPage},
+            {'commandId' : 'cancel', 'caption' : 'Abbruch', click : backToStartPage}
         ];
 
         // Set the commands html with handle bar.
@@ -161,8 +175,9 @@ function initialize() {
 
     initializeCommands();
 
+    // Button event handlers.
 
-    function toggleStyle(event) {
+    function toggleStyle() {
 
         var styleSheet1 = 'css/style.css';
         var styleSheet2 = 'css/style2.css';
@@ -187,11 +202,11 @@ function initialize() {
         }
     }
 
-    function backToStartPage(event) {
+    function backToStartPage() {
         window.location.replace('index.html');
     }
 
-    function save (event) {
+    function save () {
         if (validate()) {
             getNote(note);
             noteStorage.putNote(note);
@@ -208,4 +223,4 @@ $(function () {
             alert('Es ist ein Fehler aufgetreten:\n' + exception.toString());
         }
     }
-)
+);
