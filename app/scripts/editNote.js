@@ -12,12 +12,36 @@ function setNote(note) {
     $(titleElement()).val(note.title);
     $(descriptionElement()).val(note.description);
 
-    $(dueElement()).val(
-        note.due.getFullYear() + "-" +
-        padLeft(String((note.due.getMonth() + 1)), 2, "0") + "-" +
-        padLeft(String(note.due.getDate()), 2, "0"));
+    if(hasInputType("date")) {
+        // Chrome, format the date as YYYY-MM-DD
+        $(dueElement()).val(
+            note.due.getFullYear() + "-" +
+            padLeft(String((note.due.getMonth() + 1)), 2, "0") + "-" +
+            padLeft(String(note.due.getDate()), 2, "0"));
+    }
+    else {
+        // Date is not supported, format the date as DD.MM.YYYY
+        $(dueElement()).val(
+            padLeft(String(note.due.getDate()), 2, "0") + "." +
+            padLeft(String((note.due.getMonth() + 1)), 2, "0") + "." +
+            note.due.getFullYear());
+    }
+
     $('#importance-' + note.importance).prop('checked', true);
 }
+
+/**
+ * Checks if the browser supports an input type.
+ *
+ * @param type {string}
+ * @returns {boolean} true is the input type is supported, false if not.
+ */
+function hasInputType(type) {
+    var input = document.createElement("input");
+    input.setAttribute("type", type);
+    return input.type == type;
+}
+
 
 /**
  * Stores the note input fields in a Note instance.
@@ -27,7 +51,7 @@ function setNote(note) {
 function getNote(note) {
     note.title = $(titleElement()).val();
     note.description = $(descriptionElement()).val();
-    note.due = new Date($(dueElement()).val());
+    note.due = parseDateString($(dueElement()).val());
     note.importance = Number($('input[name="importance"]:checked').val());
 }
 
@@ -58,15 +82,31 @@ function padLeft(toPad, targetLength, padChar) {
     return result;
 }
 
+function parseDateString(dateString) {
+    var date = new Date(dateString);
+
+    if (isNaN(date.getTime())) {
+        // Browser does not know the date tag => parse the input manually.
+        var dateElements = dateString.split('.');
+        if (dateElements.length === 3) {
+            date = new Date(dateElements[2], dateElements[1] - 1, dateElements[0]);
+        }
+        else {
+            date = null;
+        }
+    }
+    return date;
+}
 function validate() {
-    if ($(titleElement()).val() == "") {
+    if ($(titleElement()).val() === "") {
         $('#title-error').html("Titel muss eingegeben werden");
-//        titleElement().placeholder = "Titel muss eingegeben werden";
         titleElement().focus();
         return false;
     }
-    if (isNaN(new Date($(dueElement()).val()).getTime())) {
-        dueElement().placeholder = "Ung�ltiges Datum. Erwartetes Format: YYYY-MM-DD";
+
+    var dateString = $(dueElement()).val();
+    if (parseDateString(dateString) == null) {
+        $('#date-error').html("Ungültiges Datum. Erwartetes Format: dd.mm.jjjj, z.B. 23.11.2014");
         dueElement().focus();
         return false;
     }
@@ -87,14 +127,14 @@ function initialize() {
         // The available commands.
         var commands = [
             {'commandId' : 'save', 'caption' : 'Speichern', click : save},
+            {'commandId' : 'toggle-style', 'caption' : 'Toggle Style', click : toggleStyle},
             {'commandId' : 'cancel', 'caption' : 'Abbruch', click : backToStartPage},
-            {'commandId' : 'toggle-style', 'caption' : 'Toggle Style', click : toggleStyle()},
         ];
 
         // Set the commands html with handle bar.
-        var songsTemplateText = $('#commands-template').html();
-        var createSongsHtml = Handlebars.compile(songsTemplateText);
-        $('#commands').html(createSongsHtml(commands));
+        var commandsTemplateText = $('#commands-template').html();
+        var createCommandsHtml = Handlebars.compile(commandsTemplateText);
+        $('.commands').html(createCommandsHtml(commands));
 
         // Assign the event handlers.
         commands.forEach(function(command) {

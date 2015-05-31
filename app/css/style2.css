@@ -4,17 +4,17 @@ body {
 }
 
 div {
-  /*width: 700px;*/
   padding: 1em;
 }
 
-textarea.note {
+
+textarea {
   height: 200px;
 }
 
 button {
-  width: 100px;
   float: right;
+  width: 100px;
   margin: 5px;
   border-radius: 10px;
 }
@@ -52,3 +52,11 @@ button {
   padding: 0;
 }
 
+/* error style */
+.error-field {
+  color: red;
+}
+
+.no-padding {
+  padding: 0em;
+}
