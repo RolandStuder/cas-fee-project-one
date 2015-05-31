@@ -71,15 +71,38 @@ function validate() {
         return false;
     }
 
-
     return true;
 
 }
+
 
 /**
  * Page initialization.
  */
 function initialize() {
+
+
+    function initializeCommands() {
+
+        // The available commands.
+        var commands = [
+            {'commandId' : 'save', 'caption' : 'Speichern', click : save},
+            {'commandId' : 'cancel', 'caption' : 'Abbruch', click : backToStartPage},
+            {'commandId' : 'toggle-style', 'caption' : 'Toggle Style', click : toggleStyle()},
+        ];
+
+        // Set the commands html with handle bar.
+        var songsTemplateText = $('#commands-template').html();
+        var createSongsHtml = Handlebars.compile(songsTemplateText);
+        $('#commands').html(createSongsHtml(commands));
+
+        // Assign the event handlers.
+        commands.forEach(function(command) {
+            $('#' + command.commandId).on('click', command.click);
+
+        });
+    }
+
 
     var noteStorage = new NoteStorage();
 
@@ -87,7 +110,7 @@ function initialize() {
 
     var note;
 
-    if ("id" in parameters) {
+    if ('id' in parameters) {
         note = noteStorage.getNote(Number(parameters.id));
     }
     else {
@@ -96,21 +119,10 @@ function initialize() {
 
     setNote(note);
 
-    function backToStartPage() {
-        window.location.replace("index.html");
-    }
+    initializeCommands();
 
-    $('#save').on('click', function (event) {
-        if (validate()) {
-            getNote(note);
-            noteStorage.putNote(note);
-            backToStartPage();
-        }
-    });
 
-    $('#cancel').on('click', backToStartPage);
-
-    function setStyle() {
+    function toggleStyle(event) {
 
         var styleSheet1 = 'css/style.css';
         var styleSheet2 = 'css/style2.css';
@@ -121,27 +133,39 @@ function initialize() {
         if ($(stylesheet).attr('href') === styleSheet1) {
             $(stylesheet).attr('href', styleSheet2);
 
-            $(inputsToSwap).each(function(index, element) {
+            $(inputsToSwap).each(function (index, element) {
                 $(element).insertAfter($(element).next())
             });
 
         }
         else {
             $(stylesheet).attr('href', styleSheet1);
-            $(inputsToSwap).each(function(index, element) {
+            $(inputsToSwap).each(function (index, element) {
                 $(element).insertBefore($(element).prev())
             });
 
         }
     }
 
-    $('#style').on('click', setStyle);
+    function backToStartPage(event) {
+        window.location.replace('index.html');
+    }
 
+    function save (event) {
+        if (validate()) {
+            getNote(note);
+            noteStorage.putNote(note);
+            backToStartPage();
+        }
+    }
 }
 
-try {
-    initialize();
-}
-catch (exception) {
-    alert('Es ist ein Fehler aufgetreten:\n' + exception.toString());
-}
+$(function () {
+        try {
+            initialize();
+        }
+        catch (exception) {
+            alert('Es ist ein Fehler aufgetreten:\n' + exception.toString());
+        }
+    }
+)
