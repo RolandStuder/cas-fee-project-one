@@ -6,17 +6,17 @@
   <link href="css/style.css" type="text/css" rel="stylesheet" />
   <script src="scripts/thirdParty/handlebars-v3.0.3.js" type="text/javascript"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 <body>
 <header>
   <h1>Notes</h1>
+  <i class="fa fa-plus" id="new-note"></i>
+  <div class="commands">
+    <button id="order-by-due" class="inverted" type="button">Nach Fälligkeitsdatum sortieren</button>
+    <button id="order-by-importance" class="inverted" type="button">Nach Wichtigkeit sortieren</button>
+  </div>
 </header>
-<div class="layout-switcher"></div>
-<div class="commands">
-  <button id="new-note" type="button">Neue Notiz</button>
-  <button id="order-by-due" type="button">Nach Erledigt sortieren</button>
-  <button id="order-by-importance" type="button">Nach Wichtigkeit sortieren</button>
-</div>
 <main>
   <!-- noteListTemplate will be rendered here -->
 </main>
@@ -30,7 +30,7 @@
       <div class="note-completion">{{completed}}</div>
       <div class="note-date">{{due}}</div>
       <p class="note-description">{{description}}</p>
-      <a href="editNote.html?id={{id}}">Edit</a>
+      <a href="editNote.html?id={{id}}" class="button">Edit</a>
     </div>
     {{/each}}
   </section>
