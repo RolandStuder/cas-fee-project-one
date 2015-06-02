@@ -11,7 +11,6 @@ var noteListTemplate = Handlebars.compile(document.getElementById('noteListTempl
 
 
 function orderListBy(list, orderBy) {
-
     if (orderBy === orderByDue) {
         list.sort(function(note1, note2) {
             // Descending.
@@ -21,10 +20,7 @@ function orderListBy(list, orderBy) {
     else if(renderList.orderBy == orderByImportance) {
         // Descending.
         notes.sort(function(note1, note2) {return note2.importance - note1.importance})
-
     }
-
-
     return list;
 }
 

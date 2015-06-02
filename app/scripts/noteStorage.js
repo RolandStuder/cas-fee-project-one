@@ -43,15 +43,12 @@ function NoteStorage() {
 
 
     /**
-     * Creates a new note with a unique id.
+     * Creates a new note with a unique id without putting it into local storage
      *
      * @returns {Note} The new note.
      */
-    this.getNewNote = function () {
+    this.createNewNote = function () {
         var note = new Note(getNextId(), "", "", 3, new Date(), false);
-        var notes = this.readNotes();
-        notes.push(note);
-        this.writeNotes(notes);
         return note;
     };
 
@@ -82,7 +79,9 @@ function NoteStorage() {
         }
 
         if(!noteFound) {
-            throw "Note not found for id " + note.id;
+            notes.push(note);
+            //if ID does not exist add the new note
+            //throw "Note not found for id " + note.id;
         }
 
         this.writeNotes(notes);
@@ -101,7 +100,7 @@ function NoteStorage() {
 
     function createInitialNotes() {
         for(var iNote = 0; iNote < 3; iNote++) {
-            var note = self.getNewNote();
+            var note = self.createNewNote();
             note.title = "Title" + (iNote + 1);
             note.description = "Description" + (iNote + 1);
             self.putNote(note);

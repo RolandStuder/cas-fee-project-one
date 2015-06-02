@@ -168,7 +168,7 @@ function initialize() {
         note = noteStorage.getNote(Number(parameters.id));
     }
     else {
-        note = noteStorage.getNewNote();
+        note = noteStorage.createNewNote();
     }
 
     setNote(note);
