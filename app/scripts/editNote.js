@@ -9,16 +9,39 @@
  */
 function setNote(note) {
 
-    titleElement().value = note.title;
-    descriptionElement().value = note.description;
+    $(titleElement()).val(note.title);
+    $(descriptionElement()).val(note.description);
 
-    dueElement().value =
-        note.due.getFullYear() + "-" +
-        padLeft(String((note.due.getMonth() + 1)), 2, "0") + "-" +
-        padLeft(String(note.due.getDate()), 2, "0");
+    if(hasInputType("date")) {
+        // Chrome, format the date as YYYY-MM-DD
+        $(dueElement()).val(
+            note.due.getFullYear() + "-" +
+            padLeft(String((note.due.getMonth() + 1)), 2, "0") + "-" +
+            padLeft(String(note.due.getDate()), 2, "0"));
+    }
+    else {
+        // Date is not supported, format the date as DD.MM.YYYY
+        $(dueElement()).val(
+            padLeft(String(note.due.getDate()), 2, "0") + "." +
+            padLeft(String((note.due.getMonth() + 1)), 2, "0") + "." +
+            note.due.getFullYear());
+    }
 
-    document.getElementById("importance-" + note.importance).checked = true;
+    $('#importance-' + note.importance).prop('checked', true);
 }
+
+/**
+ * Checks if the browser supports an input type.
+ *
+ * @param type {string}
+ * @returns {boolean} true is the input type is supported, false if not.
+ */
+function hasInputType(type) {
+    var input = document.createElement("input");
+    input.setAttribute("type", type);
+    return input.type == type;
+}
+
 
 /**
  * Stores the note input fields in a Note instance.
@@ -26,20 +49,20 @@ function setNote(note) {
  * @param {Note} note - The destination note.
  */
 function getNote(note) {
-    note.title = titleElement().value;
-    note.description = descriptionElement().value;
-    note.due = new Date(dueElement().value);
-    note.importance = Number(document.querySelector('input[name="importance"]:checked').value);
+    note.title = $(titleElement()).val();
+    note.description = $(descriptionElement()).val();
+    note.due = parseDateString($(dueElement()).val());
+    note.importance = Number($('input[name="importance"]:checked').val());
 }
 
 function titleElement() {
-    return document.getElementById("title");
+    return $("#title");
 }
 function descriptionElement() {
-    return document.getElementById("note-text");
+    return $("#note-text");
 }
 function dueElement() {
-    return document.getElementById("due");
+    return $("#due");
 }
 
 
@@ -59,81 +82,145 @@ function padLeft(toPad, targetLength, padChar) {
     return result;
 }
 
+/**
+ * Parses a date string of format YYYY-MM-DD or DD.MM.YYYY
+ *
+ * @param {string} dateString The string to parse.
+ * @returns {Date} The parsed date or null if the date string is invalid.
+ */
+function parseDateString(dateString) {
+    var date = new Date(dateString);
+
+    if (isNaN(date.getTime())) {
+        // Browser does not know the date tag => parse the input manually.
+        var dateElements = dateString.split('.');
+        if (dateElements.length === 3) {
+            date = new Date(dateElements[2], dateElements[1] - 1, dateElements[0]);
+        }
+        else {
+            date = null;
+        }
+    }
+    return date;
+}
+
+/**
+ * Validates the inputs.
+ *
+ * @returns {boolean} true if valid, false if invalid.
+ */
 function validate() {
-    if(titleElement().value == "") {
-        titleElement().placeholder = "Titel muss eingegeben werden";
+    if ($(titleElement()).val() === "") {
+        $('#title-error').html("Titel muss eingegeben werden");
         titleElement().focus();
         return false;
     }
-    if(isNaN(new Date(dueElement().value).getTime())) {
-        dueElement().placeholder = "Ung�ltiges Datum. Erwartetes Format: YYYY-MM-DD";
+
+    var dateString = $(dueElement()).val();
+    if (parseDateString(dateString) == null) {
+        $('#date-error').html("Ungültiges Datum. Erwartetes Format: dd.mm.jjjj, z.B. 23.11.2014");
         dueElement().focus();
         return false;
     }
 
-
     return true;
 
 }
+
 
 /**
  * Page initialization.
  */
 function initialize() {
 
-    var id = 0;
-    var parameters = getParametersFromSearchString(window.location.search);
 
-    if("id" in parameters) {
-        id = parameters.id;
+    // Command intialization (uses handlebar).
+
+    function initializeCommands() {
+
+        // The available commands.
+        var commands = [
+            {'commandId' : 'save', 'caption' : 'Speichern', click : save},
+            {'commandId' : 'toggle-style', 'caption' : 'Toggle Style', click : toggleStyle},
+            {'commandId' : 'cancel', 'caption' : 'Abbruch', click : backToStartPage}
+        ];
+
+        // Set the commands html with handle bar.
+        var commandsTemplateText = $('#commands-template').html();
+        var createCommandsHtml = Handlebars.compile(commandsTemplateText);
+        $('.commands').html(createCommandsHtml(commands));
+
+        // Assign the event handlers.
+        commands.forEach(function(command) {
+            $('#' + command.commandId).on('click', command.click);
+
+        });
     }
 
-    var note = Note.getNote(id);
+
+    var noteStorage = new NoteStorage();
+
+    var parameters = getParametersFromSearchString(window.location.search);
+
+    var note;
+
+    if ('id' in parameters) {
+        note = noteStorage.getNote(Number(parameters.id));
+    }
+    else {
+        note = noteStorage.getNewNote();
+    }
 
     setNote(note);
 
-    function backToStartPage() {
-        window.location.replace("index.html");
+    initializeCommands();
+
+    // Button event handlers.
+
+    function toggleStyle() {
+
+        var styleSheet1 = 'css/style.css';
+        var styleSheet2 = 'css/style2.css';
+
+        var stylesheet = $('#stylesheet');
+        var inputsToSwap = $('.label-field>input, .label-field>textarea');
+
+        if ($(stylesheet).attr('href') === styleSheet1) {
+            $(stylesheet).attr('href', styleSheet2);
+
+            $(inputsToSwap).each(function (index, element) {
+                $(element).insertAfter($(element).next())
+            });
+
+        }
+        else {
+            $(stylesheet).attr('href', styleSheet1);
+            $(inputsToSwap).each(function (index, element) {
+                $(element).insertBefore($(element).prev())
+            });
+
+        }
     }
 
-    document.getElementById("save").onclick = function() {
-        if(validate()) {
+    function backToStartPage() {
+        window.location.replace('index.html');
+    }
+
+    function save () {
+        if (validate()) {
             getNote(note);
-            Note.setNote(Number(id), note);
+            noteStorage.putNote(note);
             backToStartPage();
         }
-    };
+    }
+}
 
-    document.getElementById("cancel").onclick = backToStartPage;
-
-    function toggleColor(element) {
-        if(element.style.backgroundColor == "") {
-            element.style.backgroundColor = "black";
+$(function () {
+        try {
+            initialize();
         }
-        else {
-            element.style.backgroundColor = "";
-        }
-
-        if(element.style.color == "") {
-            element.style.color = "white";
-        }
-        else {
-            element.style.color = "";
+        catch (exception) {
+            alert('Es ist ein Fehler aufgetreten:\n' + exception.toString());
         }
     }
-
-    function setStyle() {
-        var elements = document.getElementsByTagName("*");
-        [].slice.call(elements).forEach(function(element) {toggleColor(element)});
-    }
-
-    document.getElementById("style").onclick = setStyle;
-
-}
-
-try {
-    initialize();
-}
-catch(exception) {
-    alert("Es ist ein Fehler aufgetreten:\n" + exception.toString());
-}
+);

@@ -120,3 +120,12 @@ header {
     margin: 0;
     padding: 0;
 }
+
+/* error style */
+.error-field {
+    color: red;
+}
+
+.no-padding {
+    padding: 0em;
+}
