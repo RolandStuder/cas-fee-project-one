@@ -24,3 +24,5 @@ function Note(id, title, description, importance, due, completed) {
     this.id = Number(id);
 }
 
+Note.prototype.constructor = Note;
+

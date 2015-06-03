@@ -7,124 +7,156 @@
  *
  * NoteStorage stores notes in the local storage. Methods are available to read/write all notes and
  * to get and put single note or to create a new note.
- * Note the the notes are identified by their id. NoteStorage assigns new created notes an unique id.
+ * Note that the notes are identified by their id. NoteStorage assigns an unique id to new created notes.
  *
  * @constructor
  */
 function NoteStorage() {
 
-    /**
-     * Stores an array of notes in the local storage.
-     *
-     * @param notes {Note[]} The notes to store.
-     */
-    this.writeNotes = function (notes) {
-        var notesString = JSON.stringify(notes);
-        localStorage.setItem(notesKey, notesString);
-    };
-
-    /**
-     * Reads the notes from the local storage.
-     *
-     * @returns {Note[]} The notes from the local storage.
-     */
-    this.readNotes = function () {
-        var notes = [];
-        var notesString = localStorage.getItem(notesKey);
-        var notesArray = JSON.parse(notesString);
-        if(notesArray != null) {
-            notesArray.forEach(function (noteElement) {
-                var note = new Note(noteElement.id, noteElement.title, noteElement.description, noteElement.importance, new Date(noteElement.due), noteElement.completed);
-                notes.push(note);
-            });
-        }
-        return notes;
-    };
-
-
-    /**
-     * Creates a new note with a unique id.
-     *
-     * @returns {Note} The new note.
-     */
-    this.getNewNote = function () {
-        var note = new Note(getNextId(), "", "", 3, new Date(), false);
-        var notes = this.readNotes();
-        notes.push(note);
-        this.writeNotes(notes);
-        return note;
-    };
-
-    /**
-     * Gets the note for an id.
-     *
-     * @param {number} id The id of the note.
-     * @returns {Note} The note for the id.
-     */
-    this.getNote = function(id) {
-        var notes = this.readNotes();
-        var note = notes.filter(function(note) {return note.id === id});
-        if(note.length === 0) {
-            throw "Note not found for id " + id;
-        }
-        return note[0];
-    };
-
-    this.putNote = function(note) {
-        var noteFound = false;
-        var notes = this.readNotes();
-        for(var iNote = 0; iNote < notes.length; iNote++) {
-            if(notes[iNote].id === note.id) {
-                notes[iNote] = note;
-                noteFound = true;
-                break;
-            }
-        }
-
-        if(!noteFound) {
-            throw "Note not found for id " + note.id;
-        }
-
-        this.writeNotes(notes);
-    };
 
 // Private stuff.
+
+    // I would like to have this private, but I don't know how ...
+    this.notesKey = "noteStorage";
+    this.noteIdKey = "notesStorageNextId";
+
+
+    // Create some notes if the note store is empty.
 
     var self = this;
 
     function hasStore() {
-        return localStorage.getItem(notesKey) != null;
+        return localStorage.getItem(self.notesKey) != null;
     }
 
-    var notesKey = "noteStorage";
-    var noteIdKey = "notesStorageNextId";
 
     function createInitialNotes() {
         for(var iNote = 0; iNote < 3; iNote++) {
             var note = self.getNewNote();
             note.title = "Title" + (iNote + 1);
             note.description = "Description" + (iNote + 1);
-            self.putNote(note);
+            self.updateNote(note);
         }
     }
 
-    function getNextId() {
-        var nextId = JSON.parse(localStorage.getItem(noteIdKey));
+
+    if (!hasStore()) {
+        createInitialNotes();
+    }
+}
+
+
+/**
+ * Stores an array of notes in the local storage.
+ *
+ * @param notes {Note[]} The notes to store.
+ */
+NoteStorage.prototype.writeNotes = function (notes) {
+    var notesString = JSON.stringify(notes);
+    localStorage.setItem(this.notesKey, notesString);
+};
+
+/**
+ * Reads the notes from the local storage.
+ *
+ * @returns {Note[]} The notes from the local storage.
+ */
+NoteStorage.prototype.readNotes = function () {
+    var notes = [];
+    var notesString = localStorage.getItem(this.notesKey);
+    var notesArray = JSON.parse(notesString);
+    if(notesArray != null) {
+        notesArray.forEach(function (noteObject) {
+            //noteObject.__proto__ = Note.prototype;
+            //noteObject.log();
+
+            // Convert the noteObject to an instance of the class Note.
+            var note = new Note(noteObject.id, noteObject.title, noteObject.description, noteObject.importance, new Date(noteObject.due), noteObject.completed);
+            notes.push(note);
+        });
+    }
+    return notes;
+};
+
+/**
+ * Gets the note for an id.
+ *
+ * @param {number} id The id of the note.
+ * @returns {Note} The note for the id.
+ */
+NoteStorage.prototype.getNote = function(id) {
+    var notes = this.readNotes();
+    var note = notes.filter(function(note) {return note.id === id});
+    if(note.length === 0) {
+        throw "Note not found for id " + id;
+    }
+    return note[0];
+};
+
+
+
+/**
+ * Updates an existing note.
+ *
+ * @param {Note}  note   The note to update.
+ */
+NoteStorage.prototype.updateNote = function(note) {
+    var noteFound = false;
+    var notes = this.readNotes();
+    for(var iNote = 0; iNote < notes.length; iNote++) {
+        if(notes[iNote].id === note.id) {
+            notes[iNote] = note;
+            noteFound = true;
+            break;
+        }
+    }
+
+    if(!noteFound) {
+        throw "Note not found for id " + note.id;
+    }
+
+    this.writeNotes(notes);
+};
+
+/**
+ * Creates a new note with a unique id.
+ *
+ * @returns {Note} The new note.
+ */
+NoteStorage.prototype.getNewNote = function() {
+
+    var self = this;
+
+    function getNextId () {
+        var nextId = JSON.parse(localStorage.getItem(self.noteIdKey));
         if (nextId == null) {
             nextId = 1;
         }
 
         // Store the next nextId.
-        localStorage.setItem(noteIdKey, JSON.stringify(nextId+1));
+        localStorage.setItem(self.noteIdKey, JSON.stringify(nextId+1));
         return nextId;
     }
 
-    // Ensure that some notes are available.
-    if (!hasStore()) {
-        createInitialNotes();
-    }
+    var note = new Note(getNextId(), "", "", 3, new Date(), false);
+    var notes = this.readNotes();
+    notes.push(note);
+    this.writeNotes(notes);
+    return note;
+};
 
+NoteStorage.prototype.constructor = NoteStorage;
+
+
+// Play with a derived class NoteStorageExt.
+
+function NoteStorageExt() {
+    NoteStorage.call(this);
 }
+
+NoteStorageExt.prototype = Object.create(NoteStorage.prototype);
+NoteStorageExt.prototype.constructor = NoteStorageExt;
+
 
 //noinspection JSUnusedGlobalSymbols
 /**
@@ -132,7 +164,17 @@ function NoteStorage() {
  */
 function testNoteStorage() {
 
-    localStorage.clear();
+  //  localStorage.clear();
+
+    var ns = new NoteStorage();
+
+    var nsExt = new NoteStorageExt();
+
+    var nts = nsExt.readNotes();
+
+    var t = nsExt instanceof NoteStorage;
+
+//    localStorage.clear();
     //var note2 = new Note();
     //console.log(note2.title);
     //
@@ -144,9 +186,9 @@ function testNoteStorage() {
     //var note = notes[0];
     //
     //note.title = "My title";
-    //noteStorage.putNote(note);
+    //noteStorage.updateNote(note);
     //
     //note = noteStorage.getNote(note.id);
 }
 
-// testNoteStorage();
+testNoteStorage();

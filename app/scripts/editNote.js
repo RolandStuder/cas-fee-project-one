@@ -209,7 +209,7 @@ function initialize() {
     function save () {
         if (validate()) {
             getNote(note);
-            noteStorage.putNote(note);
+            noteStorage.updateNote(note);
             backToStartPage();
         }
     }
