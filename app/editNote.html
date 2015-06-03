@@ -11,7 +11,7 @@
 
     <!--Create Commands div with handle bar.-->
     {{#each this}}
-    <button id="{{commandId}}" type="button">{{caption}}</button>
+    <button id="{{commandId}}" type="{{type}}">{{caption}}</button>
     {{/each}}
 
   </script>
@@ -24,14 +24,14 @@
 <form method="get">
   <div class="no-padding">
     <div class="label-field text-field">
-      <input type="text" id="title" required/>
       <label for="title">Titel</label>
+      <input type="text" id="title" required/>
     </div>
     <span class="error-field" id="title-error"></span>
   </div>
   <div class="label-field text-field">
-    <textarea id="note-text" required></textarea>
     <label for="note-text">Notiz</label>
+    <textarea id="note-text"></textarea>
   </div>
 
   <div class="label-field radio">
@@ -57,8 +57,8 @@
 
   <div class="no-padding">
     <div class="label-field date-field">
-      <input type="date" id="due" required value=""/>
       <label for="due">Erledigt bis</label>
+      <input type="date" id="due" value=""/>
     </div>
     <span class="error-field" id="date-error"></span>
   </div>

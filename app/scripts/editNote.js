@@ -140,9 +140,9 @@ function initialize() {
 
         // The available commands.
         var commands = [
-            {'commandId' : 'save', 'caption' : 'Speichern', click : save},
-            {'commandId' : 'toggle-style', 'caption' : 'Toggle Style', click : toggleStyle},
-            {'commandId' : 'cancel', 'caption' : 'Abbruch', click : backToStartPage}
+            {'commandId' : 'save', type: 'submit', 'caption' : 'Speichern', click : save},
+            {'commandId' : 'toggle-style', type: 'button', 'caption' : 'Toggle Style', click : toggleStyle},
+            {'commandId' : 'cancel', type: 'button', 'caption' : 'Abbruch', click : backToStartPage}
         ];
 
         // Set the commands html with handle bar.
@@ -153,7 +153,21 @@ function initialize() {
         // Assign the event handlers.
         commands.forEach(function(command) {
             $('#' + command.commandId).on('click', command.click);
+        });
+        $('form').submit(function(){save()});
+    }
 
+    function enableFloatingLabels() {
+        var targets = $($('input').add('textarea'));
+        targets.each(function(){
+            if (this.value.length > 0)
+                $('[for='+this.id+']').addClass('is-floated');
+        })
+        targets.on('focus', function(){
+            $('[for='+this.id+']').addClass('is-floated');
+        });
+        targets.on('blur', function() {
+            if (this.value.length === 0) $('[for='+this.id+']').removeClass('is-floated');
         });
     }
 
@@ -174,6 +188,7 @@ function initialize() {
     setNote(note);
 
     initializeCommands();
+    enableFloatingLabels();
 
     // Button event handlers.
 
@@ -208,6 +223,7 @@ function initialize() {
 
     function save () {
         if (validate()) {
+            event.preventDefault();
             getNote(note);
             noteStorage.putNote(note);
             backToStartPage();

@@ -121,10 +121,7 @@ input, textarea {
     font-weight: inherit;
 }
 
-input:focus + label,
-input:valid + label,
-textarea:focus + label,
-textarea:valid + label,
+label.is-floated,
 .date-field label,
 .radio label {
     top: -1.5em;
