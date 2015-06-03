@@ -182,7 +182,7 @@ function initialize() {
         note = noteStorage.getNote(Number(parameters.id));
     }
     else {
-        note = noteStorage.createNewNote();
+        note = noteStorage.createNote();
     }
 
     setNote(note);
@@ -225,7 +225,7 @@ function initialize() {
         if (validate()) {
             event.preventDefault();
             getNote(note);
-            noteStorage.putNote(note);
+            noteStorage.updateNote(note);
             backToStartPage();
         }
     }
