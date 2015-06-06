@@ -20,29 +20,6 @@ function NoteStorage() {
     this.notesKey = "noteStorage";
     this.noteIdKey = "notesStorageNextId";
 
-
-    // Create some notes if the note store is empty.
-
-    var self = this;
-
-    function hasStore() {
-        return localStorage.getItem(self.notesKey) != null;
-    }
-
-
-    function createInitialNotes() {
-        for(var iNote = 0; iNote < 3; iNote++) {
-            var note = self.getNewNote();
-            note.title = "Title" + (iNote + 1);
-            note.description = "Description" + (iNote + 1);
-            self.updateNote(note);
-        }
-    }
-
-
-    if (!hasStore()) {
-        createInitialNotes();
-    }
 }
 
 
@@ -188,4 +165,4 @@ function testNoteStorage() {
     //note = noteStorage.getNote(note.id);
 }
 
-testNoteStorage();
+//testNoteStorage();

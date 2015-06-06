@@ -89,13 +89,23 @@ function padLeft(toPad, targetLength, padChar) {
  * @returns {Date} The parsed date or null if the date string is invalid.
  */
 function parseDateString(dateString) {
+
+    // This works if dateString is YYYY-MM-DD (Chrome!)
     var date = new Date(dateString);
 
     if (isNaN(date.getTime())) {
         // Browser does not know the date tag => parse the input manually.
+        // Expected format: DD.MM.YYYY
         var dateElements = dateString.split('.');
         if (dateElements.length === 3) {
-            date = new Date(dateElements[2], dateElements[1] - 1, dateElements[0]);
+            date = new Date();
+            date.setFullYear(dateElements[2]);
+            date.setMonth(dateElements[1] - 1);
+            date.setDate(dateElements[0]);
+            if(date.getFullYear() != dateElements[2] || date.getMonth() != dateElements[1] -1 || date.getDate() != dateElements[0])
+            {
+                date = null;
+            }
         }
         else {
             date = null;
@@ -111,14 +121,15 @@ function parseDateString(dateString) {
  */
 function validate() {
     if ($(titleElement()).val() === "") {
-        $('#title-error').html("Titel muss eingegeben werden");
+    //    $('#title-error').html("Titel muss eingegeben werden");
         titleElement().focus();
         return false;
     }
 
     var dateString = $(dueElement()).val();
     if (parseDateString(dateString) == null) {
-        $('#date-error').html("Ungültiges Datum. Erwartetes Format: dd.mm.jjjj, z.B. 23.11.2014");
+     //   $('#date-error').html("Ungültiges Datum. Erwartetes Format: dd.mm.jjjj, z.B. 23.11.2014");
+        dueElement().val("dd.mm.jjjj");
         dueElement().focus();
         return false;
     }
@@ -221,9 +232,9 @@ function initialize() {
         window.location.replace('index.html');
     }
 
-    function save () {
+    function save (event) {
+        event.preventDefault();
         if (validate()) {
-            event.preventDefault();
             getNote(note);
             noteStorage.updateNote(note);
             backToStartPage();
