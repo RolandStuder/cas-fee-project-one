@@ -1,6 +1,6 @@
 function renderList(orderBy) {
     if (!orderBy) orderBy = 'importance';
-    var noteStorage = new NoteStorage();
+    var noteStorage = noteStorageSingleton.getInstance();
     var notes = noteStorage.readNotes();
     notes = orderListBy(notes, orderBy);
     $(getMainElement()).empty().html(noteListTemplate(notes));

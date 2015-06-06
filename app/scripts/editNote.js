@@ -168,7 +168,7 @@ function initialize() {
     }
 
 
-    var noteStorage = new NoteStorage();
+    var noteStorage = noteStorageSingleton.getInstance();
 
     var parameters = utilities.getParametersFromSearchString(window.location.search);
 

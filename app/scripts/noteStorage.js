@@ -42,7 +42,7 @@ NoteStorage.prototype.readNotes = function () {
     var notes = [];
     var notesString = localStorage.getItem(this.notesKey);
     var notesArray = JSON.parse(notesString);
-    if(notesArray != null) {
+    if (notesArray != null) {
         notesArray.forEach(function (noteObject) {
             //noteObject.__proto__ = Note.prototype;
             //noteObject.log();
@@ -61,15 +61,16 @@ NoteStorage.prototype.readNotes = function () {
  * @param {number} id The id of the note.
  * @returns {Note} The note for the id.
  */
-NoteStorage.prototype.getNote = function(id) {
+NoteStorage.prototype.getNote = function (id) {
     var notes = this.readNotes();
-    var note = notes.filter(function(note) {return note.id === id});
-    if(note.length === 0) {
+    var note = notes.filter(function (note) {
+        return note.id === id
+    });
+    if (note.length === 0) {
         throw "Note not found for id " + id;
     }
     return note[0];
 };
-
 
 
 /**
@@ -77,18 +78,18 @@ NoteStorage.prototype.getNote = function(id) {
  *
  * @param {Note}  note   The note to update.
  */
-NoteStorage.prototype.updateNote = function(note) {
+NoteStorage.prototype.updateNote = function (note) {
     var noteFound = false;
     var notes = this.readNotes();
-    for(var iNote = 0; iNote < notes.length; iNote++) {
-        if(notes[iNote].id === note.id) {
+    for (var iNote = 0; iNote < notes.length; iNote++) {
+        if (notes[iNote].id === note.id) {
             notes[iNote] = note;
             noteFound = true;
             break;
         }
     }
 
-    if(!noteFound) {
+    if (!noteFound) {
         notes.push(note);
     }
 
@@ -100,18 +101,18 @@ NoteStorage.prototype.updateNote = function(note) {
  *
  * @returns {Note} The new note.
  */
-NoteStorage.prototype.createNote = function() {
+NoteStorage.prototype.createNote = function () {
 
     var self = this;
 
-    function getNextId () {
+    function getNextId() {
         var nextId = JSON.parse(localStorage.getItem(self.noteIdKey));
         if (nextId == null) {
             nextId = 1;
         }
 
         // Store the next nextId.
-        localStorage.setItem(self.noteIdKey, JSON.stringify(nextId+1));
+        localStorage.setItem(self.noteIdKey, JSON.stringify(nextId + 1));
         return nextId;
     }
 
@@ -122,47 +123,67 @@ NoteStorage.prototype.createNote = function() {
 NoteStorage.prototype.constructor = NoteStorage;
 
 
-// Play with a derived class NoteStorageExt.
+var noteStorageSingleton = (new function () {
+    "use strict";
+    var noteStorage;
 
-function NoteStorageExt() {
-    NoteStorage.call(this);
-}
+    function init() {
+        noteStorage = new NoteStorage();
+        return noteStorage;
+    }
 
-NoteStorageExt.prototype = Object.create(NoteStorage.prototype);
-NoteStorageExt.prototype.constructor = NoteStorageExt;
+    return {
+        getInstance: function () {
+            if (!noteStorage) {
+                noteStorage = init();
+            }
+            return noteStorage;
+        }
+    }
+}());
 
 
-//noinspection JSUnusedGlobalSymbols
-/**
- *
- */
-function testNoteStorage() {
-
-    //  localStorage.clear();
-
-    var ns = new NoteStorage();
-
-    var nsExt = new NoteStorageExt();
-
-    var nts = nsExt.readNotes();
-
-    var t = nsExt instanceof NoteStorage;
-
-//    localStorage.clear();
-    //var note2 = new Note();
-    //console.log(note2.title);
-    //
-    //var noteStorage = new NoteStorage();
-    //
-    //var notes = noteStorage.readNotes();
-    //
-    //
-    //var note = notes[0];
-    //
-    //note.title = "My title";
-    //noteStorage.updateNote(note);
-    //
-    //note = noteStorage.getNote(note.id);
-}
+//// Play with a derived class NoteStorageExt.
+//
+//function NoteStorageExt() {
+//    NoteStorage.call(this);
+//}
+//
+//NoteStorageExt.prototype = Object.create(NoteStorage.prototype);
+//NoteStorageExt.prototype.constructor = NoteStorageExt;
+//
+//
+////noinspection JSUnusedGlobalSymbols
+///**
+// *
+// */
+//function testNoteStorage() {
+//
+//    //  localStorage.clear();
+//
+//    var ns = new NoteStorage();
+//
+//    var nsExt = new NoteStorageExt();
+//
+//    var nts = nsExt.readNotes();
+//
+//    var t = nsExt instanceof NoteStorage;
+//
+////    localStorage.clear();
+//    //var note2 = new Note();
+//    //console.log(note2.title);
+//    //
+//    //var noteStorage = new NoteStorage();
+//    //
+//    //var notes = noteStorage.readNotes();
+//    //
+//    //
+//    //var note = notes[0];
+//    //
+//    //note.title = "My title";
+//    //noteStorage.updateNote(note);
+//    //
+//    //note = noteStorage.getNote(note.id);
+//}
 
 //testNoteStorage();
