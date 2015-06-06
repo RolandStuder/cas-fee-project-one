@@ -16,14 +16,14 @@ function setNote(note) {
         // Chrome, format the date as YYYY-MM-DD
         $(dueElement()).val(
             note.due.getFullYear() + "-" +
-            padLeft(String((note.due.getMonth() + 1)), 2, "0") + "-" +
-            padLeft(String(note.due.getDate()), 2, "0"));
+            utilities.padLeft(String((note.due.getMonth() + 1)), 2, "0") + "-" +
+            utilities.padLeft(String(note.due.getDate()), 2, "0"));
     }
     else {
         // Date is not supported, format the date as DD.MM.YYYY
         $(dueElement()).val(
-            padLeft(String(note.due.getDate()), 2, "0") + "." +
-            padLeft(String((note.due.getMonth() + 1)), 2, "0") + "." +
+            utilities.padLeft(String(note.due.getDate()), 2, "0") + "." +
+            utilities.padLeft(String((note.due.getMonth() + 1)), 2, "0") + "." +
             note.due.getFullYear());
     }
 
@@ -66,21 +66,6 @@ function dueElement() {
 }
 
 
-/**
- * Left string padding.
- *
- * @param {string} toPad The string to pad.
- * @param {number} targetLength The final length of padded string.
- * @param {string} padChar The char to pad with.
- *
- */
-function padLeft(toPad, targetLength, padChar) {
-    var result = toPad.toString();
-    while (result.length < targetLength) {
-        result = padChar + result;
-    }
-    return result;
-}
 
 /**
  * Parses a date string of format YYYY-MM-DD or DD.MM.YYYY
@@ -185,7 +170,7 @@ function initialize() {
 
     var noteStorage = new NoteStorage();
 
-    var parameters = getParametersFromSearchString(window.location.search);
+    var parameters = utilities.getParametersFromSearchString(window.location.search);
 
     var note;
 
