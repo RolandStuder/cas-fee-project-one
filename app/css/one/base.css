@@ -57,3 +57,7 @@ a {
     color: inherit;
     text-decoration: inherit;
 }
+
+button {
+    text-transform: uppercase;
+}

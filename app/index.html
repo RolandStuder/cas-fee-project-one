@@ -11,16 +11,14 @@
 <body>
 <header>
   <h1>Notes</h1>
-  <i class="fa fa-plus floating-action-button" id="new-note"></i>
-  <div class="commands">
-    <button id="order-by-due" class="inverted" type="button">Nach Fälligkeitsdatum sortieren</button>
-    <button id="order-by-importance" class="inverted" type="button">Nach Wichtigkeit sortieren</button>
-    <div class="note-filter">
-      <label for="completed-filter">
-        Erledigte Notizen ausblenden
-        <input class='completed-filter-checkbox' type="checkbox" value="completed" id="completed-filter">
-      </label>
-    </div>
+  <i class="fa fa-plus header-primary-action" id="new-note"></i>
+  <div class="header-commands">
+    <button id="order-by-due" class="header-button" type="button">Nach Fälligkeitsdatum sortieren</button>
+    <button id="order-by-importance" class="header-button" type="button">Nach Wichtigkeit sortieren</button>
+    <label for="completed-filter" class="header-button">
+      Erledigte Notizen ausblenden
+      <input class='completed-filter-checkbox' type="checkbox" value="completed" id="completed-filter">
+    </label>
   </div>
 </header>
 <main>
@@ -35,7 +33,7 @@
       <h3>{{title}}</h3>
       <div class="note-completion">
         <label for="completed{{id}}">
-          Erledigt
+          erledigt
           <input class='completed-checkbox' type="checkbox" value="completed"  id="completed{{id}}" {{#if completed}}checked{{/if}}>
         </label>
       </div>

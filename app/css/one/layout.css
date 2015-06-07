@@ -22,15 +22,17 @@ html, body {
 
 header {
     flex: 0 0 auto;
-    color: white;
-    background-color: #3F51B5;
     box-shadow: 0 0.2em 0.2em rgba(130,130,130,0.5);
     z-index: 1;
+
+    color: white;
+    background-color: #3F51B5;
 }
 
 main {
     flex: 1 1 auto;
     overflow: auto;
+    padding-bottom: 5em;
 }
 
 

@@ -1,0 +1,28 @@
+.header-button {
+    display: inline-block;
+    color: white;
+    background-color: inherit;
+    border: none;
+    padding: 1em;
+    font-size: 1em;
+}
+
+.header-button:hover {
+    background-color: white;
+    color: #3F51B5;
+}
+
+.header-button input  {
+    float: left;
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
+label.header-button {
+    font-weight: 400; /* still some style interference here: Get rid of this */
+}
+
+.header-button:first-child {
+    margin-left: -1em;
+}

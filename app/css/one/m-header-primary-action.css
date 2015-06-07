@@ -1,6 +1,6 @@
 /* positioning done for header context, to use im main, change positioning */
 
-.floating-action-button {
+.header-primary-action {
     position: absolute;
     left: 1.5em;
     bottom: -1.5em;
@@ -20,16 +20,16 @@
     box-shadow: 0 0.2em 0.2em rgba(130,130,130,0.5);
 }
 
-.floating-action-button:before {
+.header-primary-action:before {
     font-size: 1em; /* font-awesome icons use before */
 }
 
-#new-note:hover {
+.header-primary-action:hover {
     opacity: 1;
     transform: scale(1.2);
 }
 
-#new-note:active {
+.header-primary-action:active {
     transform: scale(1);
 
 }

@@ -1,0 +1,37 @@
+.note {
+    border-top: 1px solid #eee;
+    margin: 0em 0em;
+    padding: 1em 0em 1em;
+    position: relative;
+}
+
+.note:last-child {
+    border-bottom: 1px solid #eee;
+}
+
+.note .button{
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    width: 4em;
+}
+
+.note:hover .button  {
+    color: #fefefe;
+    background-color: #747474;
+}
+
+.note-completion {
+    width: auto;
+    float: left;
+}
+
+.note-completion input {
+    width: auto;
+    float: left;
+
+}
+
+.note-date {
+    clear: both;
+}
