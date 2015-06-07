@@ -1,5 +1,5 @@
 function renderList() {
-    var settings = notesSettings.readSettings();
+    var settings = noteSettings.readSettings();
 
 
     var noteStorage = noteData.noteStorageSingleton.getInstance();
@@ -27,13 +27,13 @@ var noteListTemplate = Handlebars.compile(document.getElementById('noteListTempl
 
 
 function orderNotesBy(notes, orderBy) {
-    if (orderBy === notesSettings.Settings.orderByDue) {
+    if (orderBy === noteSettings.Settings.orderByDue) {
         notes.sort(function(note1, note2) {
             // Descending.
             return note2.due - note1.due;
         })
     }
-    else if(orderBy === notesSettings.Settings.orderByImportance) {
+    else if(orderBy === noteSettings.Settings.orderByImportance) {
         // Descending.
         notes.sort(function(note1, note2) {return note2.importance - note1.importance})
     }
@@ -49,19 +49,19 @@ document.getElementById("new-note").onclick = function() {
 };
 
 function setNotesOrderBy(orderBy) {
-    var settings = notesSettings.readSettings();
+    var settings = noteSettings.readSettings();
     settings.orderBy = orderBy;
-    notesSettings.updateSettings(settings);
+    noteSettings.updateSettings(settings);
     renderList();
 
 }
 
 document.getElementById("order-by-due").onclick = function() {
-    setNotesOrderBy(notesSettings.Settings.orderByDue);
+    setNotesOrderBy(noteSettings.Settings.orderByDue);
 };
 
 document.getElementById("order-by-importance").onclick = function() {
-    setNotesOrderBy(notesSettings.Settings.orderByImportance);
+    setNotesOrderBy(noteSettings.Settings.orderByImportance);
 };
 
 // execute on load

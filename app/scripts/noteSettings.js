@@ -7,7 +7,7 @@
  *  Notes settings module. Exposes functions to read and write the notes app settings and implicitly the Settings class.
   * @type {Function}
  */
-var notesSettings = (function() {
+var noteSettings = (function() {
 
     /**
      *
@@ -32,7 +32,7 @@ var notesSettings = (function() {
      */
     Settings.orderByDue = 'due';
 
-    var settingsKey = 'notesSettings';
+    var settingsKey = 'noteSettings';
 
     function updateSettings(settings) {
         var settingsString = JSON.stringify(settings);
