@@ -27,8 +27,14 @@
     {{#each this}}
     <div class="note" id="{{id}}">
       <h3>{{title}}</h3>
-      <div class="note-completion">{{completed}}</div>
+      <div class="note-completion">
+        <label for="completed" class="testcl">
+          Erledigt
+          <input class='completed-checkbox' type="checkbox" name="completed" value="completed" {{#if completed}}checked{{/if}}>
+        </label>
+      </div>
       <div class="note-date">{{due}}</div>
+      <div class="note-importance">Wichtig: {{importance}}</div>
       <p class="note-description">{{description}}</p>
       <a href="editNote.html?id={{id}}" class="button">Edit</a>
     </div>
@@ -38,6 +44,7 @@
 
 
 <script src="scripts/noteStorage.js" type="text/javascript"></script>
+<script src="scripts/notesSettings.js" type="text/javascript"></script>
 <script src="scripts/index.js" type="text/javascript"></script>
 
 </body>
