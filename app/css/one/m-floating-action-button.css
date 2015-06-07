@@ -1,0 +1,35 @@
+/* positioning done for header context, to use im main, change positioning */
+
+.floating-action-button {
+    position: absolute;
+    left: 1.5em;
+    bottom: -1.5em;
+    width: 3em;
+    height: 3em;
+
+    padding-top: 1em;
+    padding-left: 1em;
+
+    color: white;
+    background-color: #FF4081;
+
+    border-radius: 50%;
+    border: 1px solid #FF4081;
+
+
+    box-shadow: 0 0.2em 0.2em rgba(130,130,130,0.5);
+}
+
+.floating-action-button:before {
+    font-size: 1em; /* font-awesome icons use before */
+}
+
+#new-note:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+#new-note:active {
+    transform: scale(1);
+
+}
