@@ -4,7 +4,7 @@ function renderList() {
 
     var noteStorage = noteData.noteStorageSingleton.getInstance();
     var notes = noteStorage.readNotes();
-    notes = orderNotesBy(notes, settings.orderBy);
+    notes = orderAndFilterNotes(notes, settings);
     $(getMainElement()).empty().html(noteListTemplate(notes));
 
     // Note completed checkbox event handling.
@@ -26,14 +26,20 @@ function renderList() {
 var noteListTemplate = Handlebars.compile(document.getElementById('noteListTemplate').innerHTML);
 
 
-function orderNotesBy(notes, orderBy) {
-    if (orderBy === noteSettings.Settings.orderByDue) {
+function orderAndFilterNotes(notes, settings) {
+
+    if(settings.excludeCompletedNotes) {
+        notes = notes.filter(function(note) {
+            return !note.completed
+        });
+    }
+    if (settings.orderBy === noteSettings.Settings.orderByDue) {
         notes.sort(function(note1, note2) {
             // Descending.
             return note2.due - note1.due;
         })
     }
-    else if(orderBy === noteSettings.Settings.orderByImportance) {
+    else if(settings.orderBy === noteSettings.Settings.orderByImportance) {
         // Descending.
         notes.sort(function(note1, note2) {return note2.importance - note1.importance})
     }
@@ -53,7 +59,6 @@ function setNotesOrderBy(orderBy) {
     settings.orderBy = orderBy;
     noteSettings.updateSettings(settings);
     renderList();
-
 }
 
 document.getElementById("order-by-due").onclick = function() {
@@ -64,6 +69,20 @@ document.getElementById("order-by-importance").onclick = function() {
     setNotesOrderBy(noteSettings.Settings.orderByImportance);
 };
 
+function initializeCompletedFilter() {
+    var settings = noteSettings.readSettings();
+    var checkBox = $('.completed-filter-checkbox')[0];
+    checkBox.checked = settings.excludeCompletedNotes;
+
+    $(checkBox).change(function() {
+        var settings = noteSettings.readSettings();
+        settings.excludeCompletedNotes = checkBox.checked;
+        noteSettings.updateSettings(settings);
+        renderList();
+    });
+}
+
 // execute on load
+initializeCompletedFilter();
 renderList();
 

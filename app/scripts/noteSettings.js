@@ -5,17 +5,20 @@
 
 /**
  *  Notes settings module. Exposes functions to read and write the notes app settings and implicitly the Settings class.
-  * @type {Function}
+  * @type {{readSettings, updateSettings, Settings}}
  */
 var noteSettings = (function() {
+    "use strict";
 
     /**
      *
      * @param {string} orderBy The order by predicate for the notes in the main page. Use one of the Settings.orderBy.. predefined values.
+     * @param {boolean} excludeCompletedNotes Indicated if the completed notes have to be excluded from the note list.
      * @constructor
      */
-    function Settings(orderBy){
-        this.orderBy = orderBy || Settings.orderByImportance;
+    function Settings(orderBy, excludeCompletedNotes){
+        this.orderBy = String(orderBy || Settings.orderByImportance);
+        this.excludeCompletedNotes = Boolean(excludeCompletedNotes);
     }
 
     Settings.prototype.constructor = Settings;
@@ -43,11 +46,11 @@ var noteSettings = (function() {
     function readSettings() {
         var settingsString = localStorage.getItem(settingsKey);
         if(!settingsString) {
-            return new Settings();
+            return new Settings(Settings.orderByImportance, false);
         }
         else {
-            var settingsObject = JSON.parse(settingsString)
-            return new Settings(settingsObject.orderBy);
+            var settingsObject = JSON.parse(settingsString);
+            return new Settings(settingsObject.orderBy, settingsObject.excludeCompletedNotes);
         }
     }
 

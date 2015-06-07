@@ -2,7 +2,13 @@
  * Created by Luzius on 29.05.2015.
  */
 
+
+/**
+ * Note data module. Exposes the note storage singleton (to read and write notes) and the note Class (to store notes).
+ * @type {{noteStorageSingleton, Note}}
+ */
 var noteData = (function() {
+    "use strict";
 
     /**
      * Note constructor.
@@ -147,8 +153,10 @@ var noteData = (function() {
     NoteStorage.prototype.constructor = NoteStorage;
 
 
+    /**
+     *  @return The note storage singleton.
+     */
     var noteStorageSingleton = (new function () {
-        "use strict";
         var noteStorage;
 
         function init() {

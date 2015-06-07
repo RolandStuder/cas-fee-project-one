@@ -15,6 +15,12 @@
   <div class="commands">
     <button id="order-by-due" class="inverted" type="button">Nach Fälligkeitsdatum sortieren</button>
     <button id="order-by-importance" class="inverted" type="button">Nach Wichtigkeit sortieren</button>
+    <div class="note-filter">
+      <label for="completed-filter">
+        Erledigte Notizen ausblenden
+        <input class='completed-filter-checkbox' type="checkbox" value="completed" id="completed-filter">
+      </label>
+    </div>
   </div>
 </header>
 <main>
@@ -28,9 +34,9 @@
     <div class="note" id="{{id}}">
       <h3>{{title}}</h3>
       <div class="note-completion">
-        <label for="completed" class="testcl">
+        <label for="completed{{id}}">
           Erledigt
-          <input class='completed-checkbox' type="checkbox" name="completed" value="completed" {{#if completed}}checked{{/if}}>
+          <input class='completed-checkbox' type="checkbox" value="completed"  id="completed{{id}}" {{#if completed}}checked{{/if}}>
         </label>
       </div>
       <div class="note-date">{{due}}</div>
