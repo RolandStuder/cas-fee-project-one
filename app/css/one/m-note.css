@@ -1,12 +1,12 @@
 .note {
-    border-top: 1px solid #eee;
+    border-top: 1px solid #B6B6B6;
     margin: 0em 0em;
     padding: 1em 0em 1em;
     position: relative;
 }
 
 .note:last-child {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #B6B6B6;
 }
 
 .note .button{
