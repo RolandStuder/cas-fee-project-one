@@ -3,29 +3,57 @@
  */
 
 var http = require('http');
+var url = require('url');
+var fs = require('fs');
 var Router = require('./Router');
+var NoteStorage = require('./noteStorage');
 
 var router = new Router();
-console.log (router);
+var notes = new NoteStorage(); // was not able to do this via the singleton, as it does not return a function.
+
 
 router.newRoute('GET','/notes',function(req,res,params){
     res.statusCode = 200;
-    res.end(JSON.stringify(params));
+    res.end(JSON.stringify(notes.readNotes()));
 });
 
 router.newRoute('GET','/notes/:id',function(req,res,params){
     res.statusCode = 200;
-    res.end(JSON.stringify(params));
+    var note = notes.getNote(params['id']);
+    res.end(JSON.stringify(note));
 });
 
-router.newRoute('GET','.*',function(req,res,params){
+router.newRoute('POST','/notes', function(req,res,params){
     res.statusCode = 200;
-    res.end("wildcard route");
+    console.log(req.body);
+    var note = notes.updateNote({}); // need to read post data here
+    res.end('posted');
 });
+
+
+
+
+// wildcard that tries to return files from /app if it does not match any other route
+router.newRoute('GET','.*',function(req,res,params){
+    var pathname = url.parse(req.url).pathname;
+    pathname = "./app" + pathname;
+    fs.readFile(pathname,'utf-8',function(err,data){
+        if (err) {
+            res.statusCode = 404;
+            res.end('404 not found');
+        }
+        res.statusCode = 200;
+        res.end(data);
+    })
+});
+
+
+
 
 var server = http.createServer(router.requestHandler);
 
 server.listen('3000');
+console.log('running server on localhost:3000');
 
 // some tests
 
@@ -46,7 +74,8 @@ function testRequest(method,path) {
 }
 
 testRequest('GET', '/notes');
-testRequest('GET', '/notes/45740578');
+testRequest('GET', '/notes/1');
+testRequest('POST', '/notes');
 
 //Routes to be defined
 //GET /notes - Retrieves a list of notes

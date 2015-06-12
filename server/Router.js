@@ -29,9 +29,10 @@ function Router(){
         var pathname = url.parse(req.url).pathname;
 
         for (var i = 0; i < routes.length; i++) {
-            params = matchUrlWithPattern(pathname,routes[i].pattern);
-            if(params) {
-                routes[i].callback(req,res,params);
+            var route = routes[i];
+            params = matchUrlWithPattern(pathname,route.pattern);
+            if(params && route.method === req.method) {
+                route.callback(req,res,params);
                 break;
             }
         }
