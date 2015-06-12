@@ -28,11 +28,13 @@ function Router(){
 
         var pathname = url.parse(req.url).pathname;
 
-        routes.forEach(function(route){
-            params = matchUrlWithPattern(pathname,route.pattern);
-            if(params) route.callback(req,res,params);
-        });
-
+        for (var i = 0; i < routes.length; i++) {
+            params = matchUrlWithPattern(pathname,routes[i].pattern);
+            if(params) {
+                routes[i].callback(req,res,params);
+                break;
+            }
+        }
     };
 
     return {
