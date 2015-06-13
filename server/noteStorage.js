@@ -9,7 +9,7 @@ var localStorage = new Storage('noteStorage');
  * Note data module. Exposes the note storage singleton (to read and write notes) and the note Class (to store notes).
  * @type {{noteStorageSingleton, Note}}
  */
-var noteData = (function() {
+var noteData = (function () {
     "use strict";
 
     /**
@@ -35,6 +35,16 @@ var noteData = (function() {
     Note.prototype.constructor = Note;
 
     /**
+     * Converts a JSON note string to an instance of the Note class.
+     *
+     * @param (string) noteString
+     */
+    function stringToNote(noteString) {
+        var noteObject = JSON.parse(noteString);
+        return new Note(noteObject.id, noteObject.title, noteObject.description, noteObject.importance, new Date(noteObject.due), noteObject.completed);
+    }
+
+    /**
      * NoteStorage constructor.
      *
      * NoteStorage stores notes in the local storage. Methods are available to read/write all notes and
@@ -44,8 +54,6 @@ var noteData = (function() {
      * @constructor
      */
     function NoteStorage() {
-
-
 // Private stuff.
 
         // I would like to have this private, but I don't know how ...
@@ -73,12 +81,9 @@ var noteData = (function() {
     NoteStorage.prototype.readNotes = function () {
         var notes = [];
         var notesString = localStorage.getItem(this.notesKey);
-        var notesArray = JSON.parse(notesString);
-        if (notesArray != null) {
+        if (notesString != undefined) {
+            var notesArray = JSON.parse(notesString);
             notesArray.forEach(function (noteObject) {
-                //noteObject.__proto__ = Note.prototype;
-                //noteObject.log();
-
                 // Convert the noteObject to an instance of the class Note.
                 var note = new Note(noteObject.id, noteObject.title, noteObject.description, noteObject.importance, new Date(noteObject.due), noteObject.completed);
                 notes.push(note);
@@ -138,9 +143,10 @@ var noteData = (function() {
         var self = this;
 
         function getNextId() {
-            var nextId = JSON.parse(localStorage.getItem(self.noteIdKey));
-            if (nextId == null) {
-                nextId = 1;
+            var nextId = 1;
+            var nextIdString = localStorage.getItem(self.noteIdKey);
+            if(nextIdString != undefined) {
+                nextId = JSON.parse(nextIdString);
             }
 
             // Store the next nextId.
@@ -177,13 +183,15 @@ var noteData = (function() {
     }());
 
     return {
-        noteStorageSingleton : noteStorageSingleton,
+        noteStorageSingleton: noteStorageSingleton,
         NoteStorage: NoteStorage,
-        Note: Note
+        Note: Note,
+        stringToNote: stringToNote
     }
 }());
 
-module.exports = noteData.NoteStorage;
+module.exports = noteData;
+
 
 //// Play with a derived class NoteStorageExt.
 //

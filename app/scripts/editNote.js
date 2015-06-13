@@ -174,14 +174,18 @@ function initialize() {
 
     var note;
 
-    if ('id' in parameters) {
-        note = noteStorage.getNote(Number(parameters.id));
-    }
-    else {
-        note = noteStorage.createNote();
+    function noteAvailable(noteFromStorage) {
+        note = noteFromStorage;
+        setNote(note);
     }
 
-    setNote(note);
+    if ('id' in parameters) {
+        noteStorage.getNote(Number(parameters.id), noteAvailable);
+    }
+    else {
+        note = noteStorage.createNote(noteAvailable);
+    }
+
 
     initializeCommands();
     enableFloatingLabels();
@@ -221,7 +225,7 @@ function initialize() {
         event.preventDefault();
         if (validate()) {
             getNote(note);
-            noteStorage.updateNote(note);
+            noteStorage.updateNote(note, function(note){});
             backToStartPage();
         }
     }

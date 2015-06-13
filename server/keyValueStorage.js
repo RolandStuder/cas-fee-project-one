@@ -7,7 +7,7 @@ fs = require('fs');
 
 function Storage(name) {
 
-    // intialize
+    // initialize
     var dbFile = createDbFile(name);
 
     function readValue(key) { // returns an string

@@ -7,7 +7,7 @@
  * Note data module. Exposes the note storage singleton (to read and write notes) and the note Class (to store notes).
  * @type {{noteStorageSingleton, Note}}
  */
-var noteData = (function() {
+var noteData = (function () {
     "use strict";
 
     /**
@@ -50,8 +50,9 @@ var noteData = (function() {
         this.notesKey = "noteStorage";
         this.noteIdKey = "notesStorageNextId";
 
-    }
+        this.useLocalStorage = false;
 
+    }
 
     /**
      * Stores an array of notes in the local storage.
@@ -64,13 +65,12 @@ var noteData = (function() {
     };
 
     /**
-     * Reads the notes from the local storage.
+     * Converts a JSON notes string to an array of instances of the Note class.
      *
-     * @returns {Note[]} The notes from the local storage.
+     * @param (string) notesString
      */
-    NoteStorage.prototype.readNotes = function () {
+    function notesStringToNotes(notesString) {
         var notes = [];
-        var notesString = localStorage.getItem(this.notesKey);
         var notesArray = JSON.parse(notesString);
         if (notesArray != null) {
             notesArray.forEach(function (noteObject) {
@@ -83,23 +83,82 @@ var noteData = (function() {
             });
         }
         return notes;
+    }
+
+    /**
+     * Converts a JSON note string to an instance of the Note class.
+     *
+     * @param (string) noteString
+     */
+    function noteStringToNote(noteString) {
+        var noteObject = JSON.parse(noteString);
+        return new Note(noteObject.id, noteObject.title, noteObject.description, noteObject.importance, new Date(noteObject.due), noteObject.completed);
+    }
+
+    /**
+     * @callback notesCallback The function that is called when notes are read from the storage.
+     * @param  {Note[]} notes The notes from the storage.
+     */
+
+    /**
+     * Reads the notes from the local storage.
+     *
+     * @param {notesCallback} notesCallback The callback function that is called when the notes are read.
+     */
+    NoteStorage.prototype.readNotes = function (notesCallback) {
+
+        if (this.useLocalStorage) {
+            var notesString = localStorage.getItem(this.notesKey);
+            var notes = notesStringToNotes(notesString);
+            notesCallback(notes);
+        }
+        else {
+            $.get('http://localhost:3000/notes', function (data, status) {
+                if (notesCallback != undefined) {
+                    var notes = notesStringToNotes(data);
+                    notesCallback(notes);
+                }
+                else {
+                    alert("Data: " + data + "\nStatus: " + status);
+                }
+            });
+        }
     };
+
+    /**
+     * @callback noteCallback The function that is called when notes are read from the storage.
+     * @param  {Note} note The note from the storage.
+     */
 
     /**
      * Gets the note for an id.
      *
      * @param {number} id The id of the note.
-     * @returns {Note} The note for the id.
+     * @param {noteCallback} noteCallback The callback function that is called when the notes are read.
      */
-    NoteStorage.prototype.getNote = function (id) {
-        var notes = this.readNotes();
-        var note = notes.filter(function (note) {
-            return note.id === id
-        });
-        if (note.length === 0) {
-            throw "Note not found for id " + id;
+    NoteStorage.prototype.getNote = function (id, noteCallback) {
+
+        if(this.useLocalStorage) {
+            var notes = this.readNotes();
+            var note = notes.filter(function (note) {
+                return note.id === id
+            });
+            if (note.length === 0) {
+                throw "Note not found for id " + id;
+            }
+            noteCallback(note[0]);
         }
-        return note[0];
+        else {
+            $.get('http://localhost:3000/notes/' + id, function (data, status) {
+                if (noteCallback != undefined) {
+                    var note = noteStringToNote(data);
+                    noteCallback(note);
+                }
+                else {
+                    alert("Data: " + data + "\nStatus: " + status);
+                }
+            });
+        }
     };
 
 
@@ -108,46 +167,72 @@ var noteData = (function() {
      *
      * @param {Note}  note   The note to update.
      */
-    NoteStorage.prototype.updateNote = function (note) {
-        var noteFound = false;
-        var notes = this.readNotes();
-        for (var iNote = 0; iNote < notes.length; iNote++) {
-            if (notes[iNote].id === note.id) {
-                notes[iNote] = note;
-                noteFound = true;
-                break;
+    NoteStorage.prototype.updateNote = function (note, noteCallback) {
+        if(this.useLocalStorage) {
+            var noteFound = false;
+            var notes = this.readNotes();
+            for (var iNote = 0; iNote < notes.length; iNote++) {
+                if (notes[iNote].id === note.id) {
+                    notes[iNote] = note;
+                    noteFound = true;
+                    break;
+                }
             }
-        }
 
-        if (!noteFound) {
-            notes.push(note);
-        }
+            if (!noteFound) {
+                notes.push(note);
+            }
 
-        this.writeNotes(notes);
+            this.writeNotes(notes);
+        }
+        else {
+            var noteString = JSON.stringify(note);
+
+            $.post('http://localhost:3000/notes/' + note.id, noteString, function (data, status) {
+                if (noteCallback != undefined) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+
+                    noteCallback();
+                }
+                else {
+                    alert("Data: " + data + "\nStatus: " + status);
+                }
+            });
+        }
     };
 
     /**
      * Creates a new note with a unique id.
      *
-     * @returns {Note} The new note.
+     * @param {noteCallback} noteCallback The callback function that is called when the notes the new note is created.
      */
-    NoteStorage.prototype.createNote = function () {
-
-        var self = this;
-
+    NoteStorage.prototype.createNote = function (noteCallback) {
         function getNextId() {
-            var nextId = JSON.parse(localStorage.getItem(self.noteIdKey));
+            var nextId = JSON.parse(localStorage.getItem(this.noteIdKey));
             if (nextId == null) {
                 nextId = 1;
             }
 
             // Store the next nextId.
-            localStorage.setItem(self.noteIdKey, JSON.stringify(nextId + 1));
+            localStorage.setItem(this.noteIdKey, JSON.stringify(nextId + 1));
             return nextId;
         }
+        if(this.useLocalStorage) {
 
-        var note = new Note(getNextId(), "", "", 3, new Date(), false);
-        return note;
+            var note = new Note(getNextId(), "", "", 3, new Date(), false);
+            noteCallback(note);
+        }
+        else {
+            $.post('http://localhost:3000/notes', function (data, status) {
+                if (noteCallback != undefined) {
+                    var note = noteStringToNote(data);
+                    noteCallback(note);
+                }
+                else {
+                    alert("Data: " + data + "\nStatus: " + status);
+                }
+            });
+        }
     };
 
     NoteStorage.prototype.constructor = NoteStorage;
@@ -175,7 +260,7 @@ var noteData = (function() {
     }());
 
     return {
-        noteStorageSingleton : noteStorageSingleton,
+        noteStorageSingleton: noteStorageSingleton,
         Note: Note
     }
 }());
