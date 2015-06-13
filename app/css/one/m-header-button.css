@@ -26,3 +26,8 @@ label.header-button {
 .header-button:first-child {
     margin-left: -1em;
 }
+
+.header-button.is-active {
+    background-color: white;
+    color: #3F51B5;
+}
