@@ -90,11 +90,31 @@ function initializeCompletedFilter() {
     });
 }
 
-// execute on load
+/**
+ * Initializes Handelbars stuff.
+ */
+function initializeHandleBars() {
 
-$(function () {
+    /**
+     *  The date formatter.
+     */
+    Handlebars.registerHelper("formatDate", function (date) {
+        return date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+    });
+
+    /**
+     *  The importance formatter. Converts the importance number to stars.
+     */
+    Handlebars.registerHelper("formatImportance", function (importance) {
+        return Array(importance).join('*' /*String.fromCharCode(0x26A1)*/);
+    });
     noteListTemplate = Handlebars.compile(document.getElementById('noteListTemplate').innerHTML);
+
+}
+// execute on load
+$(function () {
     noteSettings.initializeSettings(function() {
+        initializeHandleBars();
         initializeCompletedFilter();
         renderList();
     });
