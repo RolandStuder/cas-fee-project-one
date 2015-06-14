@@ -54,8 +54,7 @@ var noteData = (function () {
 
 
     }
-
-
+    
     /**
      * Converts a JSON notes string to an array of instances of the Note class.
      *
@@ -97,7 +96,7 @@ var noteData = (function () {
     NoteStorage.prototype.readNotes = function (notesCallback) {
 
         $.get('http://localhost:3000/notes', function (data, status) {
-            if (notesCallback != undefined) {
+            if (notesCallback !== undefined) {
                 var notes = notesStringToNotes(data);
                 notesCallback(notes);
             }
@@ -121,7 +120,7 @@ var noteData = (function () {
     NoteStorage.prototype.getNote = function (id, noteCallback) {
 
         $.get('http://localhost:3000/notes/' + id, function (data, status) {
-            if (noteCallback != undefined) {
+            if (noteCallback !== undefined) {
                 var note = noteStringToNote(data);
                 noteCallback(note);
             }
@@ -141,7 +140,7 @@ var noteData = (function () {
         var noteString = JSON.stringify(note);
 
         $.post('http://localhost:3000/notes/' + note.id, noteString, function (data, status) {
-            if (noteCallback != undefined) {
+            if (noteCallback !== undefined) {
                 console.log("Data: " + data + "\nStatus: " + status);
 
                 noteCallback();
@@ -159,7 +158,7 @@ var noteData = (function () {
      */
     NoteStorage.prototype.createNote = function (noteCallback) {
         $.post('http://localhost:3000/notes', function (data, status) {
-            if (noteCallback != undefined) {
+            if (noteCallback !== undefined) {
                 var note = noteStringToNote(data);
                 noteCallback(note);
             }
