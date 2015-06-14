@@ -10,22 +10,34 @@
 </head>
 <body>
 <header>
-  <h1>Notes</h1>
-  <i class="fa fa-plus header-primary-action" id="new-note"></i>
-  <div class="header-commands">
-    <button id="order-by-due" class="header-button" type="button">Nach Fälligkeitsdatum sortieren</button>
-    <button id="order-by-importance" class="header-button" type="button">Nach Wichtigkeit sortieren</button>
-    <label for="completed-filter" class="header-button">
-      Erledigte Notizen ausblenden
-      <input class='completed-filter-checkbox' type="checkbox" value="completed" id="completed-filter">
-    </label>
-  </div>
+  <!-- indexHeader will be rendered here -->
 </header>
+
 <main>
   <!-- noteListTemplate will be rendered here -->
 </main>
 
 <!-- Templates-->
+<script id="indexHeader" type="text/x-handlebars-template">
+  <h1>Notes</h1>
+  <i class="fa fa-plus header-primary-action" id="new-note"></i>
+  <div class="header-commands">
+    <button id="order-by-due" class="header-button {{#if due}}is-active{{/if}}" type="button">Nach Fälligkeitsdatum sortieren</button>
+    <button id="order-by-importance" class="header-button {{#if importance}}is-active{{/if}}" type="button">Nach Wichtigkeit sortieren</button>
+    {{#if excludeCompletedNotes}}
+      <label for="completed-filter" class="header-button is-active">
+        Erledigte Notizen einblenden
+        <input class='completed-filter-checkbox' type="checkbox" value="completed" id="completed-filter">
+      </label>
+    {{else}}
+      <label for="completed-filter" class="header-button">
+        Erledigte Notizen ausblenden
+        <input class='completed-filter-checkbox' type="checkbox" value="completed" id="completed-filter">
+      </label>
+    {{/if}}
+  </div>
+</script>
+
 <script id="noteListTemplate" type="text/x-handlebars-template">
   <section class="notes">
     {{#each this}}
@@ -45,6 +57,7 @@
     {{/each}}
   </section>
 </script>
+
 
 
 <script src="scripts/noteStorage.js" type="text/javascript"></script>

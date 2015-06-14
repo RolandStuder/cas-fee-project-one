@@ -1,55 +1,52 @@
-/**
- * The notes list handle bar template.
- */
-var noteListTemplate;
+var template = {
+    render: function () {
+        var settings = noteSettings.getSettings();
+        if (settings.orderBy === 'due') {settings.due = true} else { settings.due = false };
+        if (settings.orderBy === 'importance') {settings.importance = true} else { settings.importance = false };
 
+        var noteStorage = noteData.noteStorageSingleton.getInstance();
+        var notes = noteStorage.readNotes(function(notes) {
+            notes = orderAndFilterNotes(notes, settings);
+            $('header').empty().html(indexHeaderTemplate(settings));
+            $(getMainElement()).empty().html(noteListTemplate(notes));
 
-function renderList() {
-    var settings = noteSettings.getSettings();
+            // Note completed checkbox event handling.
+            $('.completed-checkbox').change(function (event) {
 
-    var noteStorage = noteData.noteStorageSingleton.getInstance();
-    var notes = noteStorage.readNotes(function (notes) {
-        notes = orderAndFilterNotes(notes, settings);
-        $(getMainElement()).empty().html(noteListTemplate(notes));
+                // Update the note's completed property and store
+                // it in the note storage.
+                var checkBox = $(event.currentTarget)[0];
+                var noteElement = $(checkBox).parents('.note')[0];
+                var id = Number($(noteElement).attr('id'));
+                noteStorage.getNote(id, function(note) {
+                    note.completed = checkBox.checked;
+                    noteStorage.updateNote(note, function(note) {});
 
-        // Note completed checkbox event handling.
-        $('.completed-checkbox').change(function (event) {
-
-            // Update the note's completed property and store
-            // it in the note storage.
-            var checkBox = $(event.currentTarget)[0];
-            var noteElement = $(checkBox).parents('.note')[0];
-            var id = Number($(noteElement).attr('id'));
-            noteStorage.getNote(id, function (note) {
-                note.completed = checkBox.checked;
-                noteStorage.updateNote(note, function (note) {
                 });
-
             });
+            template.afterRender();
         });
-    });
-
-}
-
+    }
+};
 
 function orderAndFilterNotes(notes, settings) {
 
-    if (settings.excludeCompletedNotes) {
-        notes = notes.filter(function (note) {
+  //  alert(notes[2].completed)
+
+    if(settings.excludeCompletedNotes) {
+        notes = notes.filter(function(note) {
             return !note.completed
         });
     }
     if (settings.orderBy === noteSettings.Settings.orderByDue) {
-        notes.sort(function (note1, note2) {
+        notes.sort(function(note1, note2) {
             // Descending.
             return note2.due - note1.due;
         })
     }
-    else if (settings.orderBy === noteSettings.Settings.orderByImportance) {
+    else if(settings.orderBy === noteSettings.Settings.orderByImportance) {
         // Descending.
-        notes.sort(function (note1, note2) {
-            return note2.importance - note1.importance
-        })
+        notes.sort(function(note1, note2) {return note2.importance - note1.importance})
     }
     return notes;
 }
@@ -58,35 +55,25 @@ function getMainElement() {
     return document.getElementsByTagName('main')[0];
 }
 
-document.getElementById("new-note").onclick = function () {
-    window.location.replace('editNote.html')
-};
+
 
 function setNotesOrderBy(orderBy) {
     var settings = noteSettings.getSettings();
     settings.orderBy = orderBy;
-    noteSettings.updateSettings(settings);
-    renderList();
+    noteSettings.updateSettings();
+    template.render();
 }
-
-document.getElementById("order-by-due").onclick = function () {
-    setNotesOrderBy(noteSettings.Settings.orderByDue);
-};
-
-document.getElementById("order-by-importance").onclick = function () {
-    setNotesOrderBy(noteSettings.Settings.orderByImportance);
-};
 
 function initializeCompletedFilter() {
     var settings = noteSettings.getSettings();
     var checkBox = $('.completed-filter-checkbox')[0];
     checkBox.checked = settings.excludeCompletedNotes;
 
-    $(checkBox).change(function () {
+    $(checkBox).change(function() {
         var settings = noteSettings.getSettings();
         settings.excludeCompletedNotes = checkBox.checked;
         noteSettings.updateSettings();
-        renderList();
+        template.render();
     });
 }
 
@@ -108,14 +95,31 @@ function initializeHandleBars() {
     Handlebars.registerHelper("formatImportance", function (importance) {
         return Array(importance + 1).join('*' /*String.fromCharCode(0x26A1)*/);
     });
-    noteListTemplate = Handlebars.compile(document.getElementById('noteListTemplate').innerHTML);
+    
+    var noteListTemplate = Handlebars.compile(document.getElementById('noteListTemplate').innerHTML);
+    var indexHeaderTemplate = Handlebars.compile(document.getElementById('indexHeader').innerHTML);
 
 }
+
 // execute on load
-$(function () {
-    noteSettings.initializeSettings(function() {
-        initializeHandleBars();
+noteSettings.initializeSettings(function() {
+    initializeHandleBars();
+    template.render();
+
+    template.afterRender = function() { //callback function in renderPAge
+
         initializeCompletedFilter();
-        renderList();
-    });
+
+        document.getElementById("new-note").onclick = function () {
+            window.location.replace('editNote.html')
+        };
+        document.getElementById("order-by-due").onclick = function () {
+            setNotesOrderBy(noteSettings.Settings.orderByDue);
+        };
+
+        document.getElementById("order-by-importance").onclick = function () {
+            setNotesOrderBy(noteSettings.Settings.orderByImportance);
+        };
+    };
+
 });
