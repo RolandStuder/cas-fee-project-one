@@ -40,8 +40,10 @@ router.newRoute('POST', '/notes', function (req, res, params) {
 router.newRoute('POST', '/notes/:id', function (req, res, params) {
     res.statusCode = 200;
     var body = '';
-    req.on('data', function(data) {body += data.toString()});
-    req.on('end', function() {
+    req.on('data', function (data) {
+        body += data.toString()
+    });
+    req.on('end', function () {
 //        console.log(body);
         notes.updateNote(noteData.stringToNote(body));
         res.end("updated");
@@ -65,8 +67,10 @@ router.newRoute('GET', '/settings', function (req, res, params) {
 router.newRoute('POST', '/settings', function (req, res, params) {
     res.statusCode = 200;
     var body = '';
-    req.on('data', function(data) {body += data.toString()});
-    req.on('end', function() {
+    req.on('data', function (data) {
+        body += data.toString()
+    });
+    req.on('end', function () {
         noteSettings.updateSettings(JSON.parse(body));
         res.end("updated");
     });
@@ -75,32 +79,33 @@ router.newRoute('POST', '/settings', function (req, res, params) {
 
 // wildcard that tries to return files from /app if it does not match any other route
 router.newRoute('GET', '.*', function (req, res, params) {
-    if(req == undefined) {
-        var b = 1;
-    }
+
     var pathname = url.parse(req.url).pathname;
-    if(pathname === '/') {
+    if (pathname === '/') {
         pathname = '/index.html'
     }
-    pathname = "../app" + pathname;
-//    console.log(pathname);
-    fs.readFile(pathname, 'utf-8', function (err, data) {
-        if (err) {
-            res.statusCode = 404;
-            res.end('404 not found');
-        }
-        res.statusCode = 200;
+    pathname = path.join('..', 'app', pathname);
 
-        var extension = path.extname(pathname);
-        if( extension === '.css') {
-            res.setHeader("Content-Type", 'text/css');
-        }
-        else if(extension === '.js') {
-            res.setHeader("Content-Type", 'text/javascript');
+    res.statusCode = 200;
 
-        }
-        res.end(data);
-    })
+    var extension = path.extname(pathname);
+    if (extension === '.css') {
+        res.setHeader("Content-Type", 'text/css');
+    }
+    else if (extension === '.js') {
+        res.setHeader("Content-Type", 'text/javascript');
+    }
+    else if (extension === '.html') {
+        res.setHeader("Content-Type", 'text/html');
+    }
+
+    var readStream = fs.createReadStream(pathname);
+    readStream.on('error', function (error) {
+        res.statusCode = 404;
+        res.end(error.toString());
+    });
+
+    readStream.pipe(res);
 });
 
 
@@ -149,7 +154,7 @@ function testRequest(method, path, postData) {
     }
 }
 
-testRequest('GET', '/settings');
+//testRequest('GET', '/settings');
 //testRequest('POST', '/settings', new noteSettings.Settings(noteSettings.Settings.orderByDue, true));
 
 //testRequest('GET', '/notes');

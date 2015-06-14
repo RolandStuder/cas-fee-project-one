@@ -106,7 +106,7 @@ function initializeHandleBars() {
      *  The importance formatter. Converts the importance number to stars.
      */
     Handlebars.registerHelper("formatImportance", function (importance) {
-        return Array(importance).join('*' /*String.fromCharCode(0x26A1)*/);
+        return Array(importance + 1).join('*' /*String.fromCharCode(0x26A1)*/);
     });
     noteListTemplate = Handlebars.compile(document.getElementById('noteListTemplate').innerHTML);
 

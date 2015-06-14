@@ -54,7 +54,7 @@ var noteData = (function () {
 
 
     }
-    
+
     /**
      * Converts a JSON notes string to an array of instances of the Note class.
      *
@@ -193,7 +193,14 @@ var noteData = (function () {
     }());
 
     return {
+        /**
+         * The note storage singleton.
+         */
         noteStorageSingleton: noteStorageSingleton,
+
+        /**
+         * The Note Class.
+         */
         Note: Note
     }
 }());
