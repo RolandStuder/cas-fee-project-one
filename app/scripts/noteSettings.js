@@ -13,7 +13,7 @@ var noteSettings = (function() {
     /**
      *
      * @param {string} orderBy The order by predicate for the notes in the main page. Use one of the Settings.orderBy.. predefined values.
-     * @param {boolean} excludeCompletedNotes Indicated if the completed notes have to be excluded from the note list.
+     * @param {boolean} excludeCompletedNotes Indicates if the completed notes have to be excluded from the note list.
      * @constructor
      */
     function Settings(orderBy, excludeCompletedNotes){
@@ -35,28 +35,63 @@ var noteSettings = (function() {
      */
     Settings.orderByDue = 'due';
 
-    var settingsKey = 'noteSettings';
 
-    function updateSettings(settings) {
-        var settingsString = JSON.stringify(settings);
-        localStorage.setItem(settingsKey, settingsString);
+    function settingsStringToSettings(settingsString) {
+        var settingsObject = JSON.parse(settingsString);
+        return new Settings(settingsObject.orderBy, settingsObject.excludeCompletedNotes);
+    }
+
+    function settingsStringFromSettings(settings) {
+        return JSON.stringify(settings);
+    }
+
+    /**
+     * @callback settingsCallback The function that is called when the settings are read from the storage.
+     * @param  {Settings} settings The settings from the storage.
+     */
+
+    /**
+     * @callback doneCallback A simple callback without parameter that indicates that a async function has completed.
+     */
+
+    function updateSettings(settings, doneCallback) {
+        var settingsString = settingsStringFromSettings(settings);
+        $.post('http://localhost:3000/settings', settingsString, function (data, status) {
+            if (doneCallback != undefined) {
+                doneCallback();
+            }
+            else {
+                alert("Data: " + data + "\nStatus: " + status);
+            }
+        });
     }
 
 
-    function readSettings() {
-        var settingsString = localStorage.getItem(settingsKey);
-        if(!settingsString) {
-            return new Settings(Settings.orderByImportance, false);
-        }
-        else {
-            var settingsObject = JSON.parse(settingsString);
-            return new Settings(settingsObject.orderBy, settingsObject.excludeCompletedNotes);
-        }
+    function readSettings(settingsCallback) {
+        $.get('http://localhost:3000/settings', function (data, status) {
+            if (settingsCallback != undefined) {
+                var settings = settingsStringToSettings(data);
+                settingsCallback(settings);
+            }
+            else {
+                alert("Data: " + data + "\nStatus: " + status);
+            }
+        });
+    }
+
+    var settingsSingleton;
+
+    function initializeSettings(doneCallback) {
+        readSettings(function (settings) {
+            settingsSingleton = settings;
+            doneCallback();
+        });
     }
 
     return {
-        readSettings : readSettings,
-        updateSettings : updateSettings,
+        initializeSettings : initializeSettings,
+        getSettings : function () {return settingsSingleton},
+        updateSettings : function () {updateSettings(settingsSingleton, function(){})},
         Settings : Settings
     }
 

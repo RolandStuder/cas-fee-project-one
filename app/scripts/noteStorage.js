@@ -51,6 +51,11 @@ var noteData = (function () {
         this.noteIdKey = "notesStorageNextId";
 
         this.useLocalStorage = false;
+        $.ajaxSetup({
+            // Disable caching of AJAX responses.
+            cache: false
+        });
+
 
     }
 
