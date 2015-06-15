@@ -47,8 +47,9 @@ textarea {
 
 fieldset input,
 fieldset label {
-    position: relative;
-    display: inline-block;
+    /* Luzi: Show radio buttons horizontally aligned. */
+    /*position: relative;*/
+    /*display: inline-block;*/
     width: auto;
 }
 
@@ -59,11 +60,13 @@ fieldset label {
     margin: 2em 0em;
 }
 
+
 form label {
     font-weight: 400;
-    position: absolute;
-    top: 0;
-    left: 0;
+    /* Luzi: Do not show title and text at the same place. */
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: 0;*/
     width: 100%;
     transition: all 300ms;
     text-transform: uppercase;

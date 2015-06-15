@@ -19,11 +19,6 @@ button {
   border-radius: 10px;
 }
 
-.shadow {
-  box-shadow: 5px 5px 5px lightsteelblue;
-}
-
-
 .label-field {
   display: flex;
 }
