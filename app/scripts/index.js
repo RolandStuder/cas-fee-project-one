@@ -77,6 +77,9 @@ function initializeCompletedFilter() {
     });
 }
 
+var noteListTemplate;
+var indexHeaderTemplate;
+
 /**
  * Initializes Handelbars stuff.
  */
@@ -96,8 +99,8 @@ function initializeHandleBars() {
         return Array(importance + 1).join('*' /*String.fromCharCode(0x26A1)*/);
     });
     
-    var noteListTemplate = Handlebars.compile(document.getElementById('noteListTemplate').innerHTML);
-    var indexHeaderTemplate = Handlebars.compile(document.getElementById('indexHeader').innerHTML);
+    noteListTemplate = Handlebars.compile(document.getElementById('noteListTemplate').innerHTML);
+    indexHeaderTemplate = Handlebars.compile(document.getElementById('indexHeader').innerHTML);
 
 }
 
