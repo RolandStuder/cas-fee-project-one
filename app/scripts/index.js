@@ -5,7 +5,7 @@ var template = {
         if (settings.orderBy === 'importance') {settings.importance = true} else { settings.importance = false };
 
         var noteStorage = noteData.noteStorageSingleton.getInstance();
-        var notes = noteStorage.readNotes(function(notes) {
+        noteStorage.readNotes(function(notes) {
             notes = orderAndFilterNotes(notes, settings);
             $('header').empty().html(indexHeaderTemplate(settings));
             $(getMainElement()).empty().html(noteListTemplate(notes));

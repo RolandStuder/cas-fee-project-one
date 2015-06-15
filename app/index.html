@@ -22,8 +22,8 @@
   <h1>Notes</h1>
   <i class="fa fa-plus header-primary-action" id="new-note"></i>
   <div class="header-commands">
-    <button id="order-by-due" class="header-button {{#if due}}is-active{{/if}}" type="button">Nach Fälligkeitsdatum sortieren</button>
-    <button id="order-by-importance" class="header-button {{#if importance}}is-active{{/if}}" type="button">Nach Wichtigkeit sortieren</button>
+    <button id="order-by-due" class="header-button {{#if due}}is-active{{else}}is-not-active{{/if}}" type="button">Nach Fälligkeitsdatum sortieren</button>
+    <button id="order-by-importance" class="header-button {{#if importance}}is-active{{else}}is-not-active{{/if}}" type="button">Nach Wichtigkeit sortieren</button>
     {{#if excludeCompletedNotes}}
       <label for="completed-filter" class="header-button is-active">
         Erledigte Notizen einblenden

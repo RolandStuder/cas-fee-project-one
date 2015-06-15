@@ -7,7 +7,12 @@
     font-size: 1em;
 }
 
-.header-button:hover {
+.header-button.is-not-active {
+    color: white;
+    background-color:  #3F51B5;
+}
+
+.header-button:hover, .header-button.is-active {
     background-color: white;
     color: #3F51B5;
 }
@@ -27,7 +32,3 @@ label.header-button {
     margin-left: -1em;
 }
 
-.header-button.is-active {
-    background-color: white;
-    color: #3F51B5;
-}
