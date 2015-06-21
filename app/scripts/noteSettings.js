@@ -67,21 +67,28 @@ var noteSettings = (function() {
 
 
     /**
-     * Upates the settings on the server.
+     * Updates the settings on the server.
      *
      * @param {Settings} settings The settings to update.
      * @param {doneCallback} doneCallback  The callback that is called when the settings are stored.
      */
     function updateSettings(settings, doneCallback) {
         var settingsString = settingsStringFromSettings(settings);
-        $.post('http://localhost:3000/settings', settingsString, function (data, status) {
-            if (doneCallback !== undefined) {
-                doneCallback();
-            }
-            else {
-                alert("Data: " + data + "\nStatus: " + status);
+
+        $.ajax({
+            url: 'http://localhost:3000/settings',
+            type: 'PUT',
+            data: settingsString,
+            success: function (response) {
+                if (typeof doneCallback != 'undefined') {
+                    doneCallback();
+                }
+                else {
+                    alert("Data: " + data + "\nStatus: " + status);
+                }
             }
         });
+
     }
 
 
@@ -92,7 +99,7 @@ var noteSettings = (function() {
      */
     function readSettings(settingsCallback) {
         $.get('http://localhost:3000/settings', function (data, status) {
-            if (settingsCallback !== undefined) {
+            if (typeof settingsCallback != 'undefined') {
                 var settings = settingsStringToSettings(data);
                 settingsCallback(settings);
             }

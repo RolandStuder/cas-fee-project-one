@@ -233,6 +233,11 @@ function initialize() {
 
 $(function () {
         try {
+
+            // Alert ajax errors.
+            utilities.alertAjaxErrors();
+
+            // Initialize page.
             initialize();
         }
         catch (exception) {

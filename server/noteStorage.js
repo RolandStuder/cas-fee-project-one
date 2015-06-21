@@ -3,7 +3,7 @@
  */
 
 var Storage = require('./keyValueStorage');
-var localStorage = new Storage('noteStorage');
+var storage = new Storage('noteStorage');
 
 /**
  * Note data module. Exposes the note storage singleton (to read and write notes) and the note Class (to store notes).
@@ -56,7 +56,6 @@ var noteData = (function () {
     function NoteStorage() {
 // Private stuff.
 
-        // I would like to have this private, but I don't know how ...
         this.notesKey = "noteStorage";
         this.noteIdKey = "notesStorageNextId";
 
@@ -70,7 +69,7 @@ var noteData = (function () {
      */
     NoteStorage.prototype.writeNotes = function (notes) {
         var notesString = JSON.stringify(notes);
-        localStorage.setItem(this.notesKey, notesString);
+        storage.setItem(this.notesKey, notesString);
     };
 
     /**
@@ -80,7 +79,7 @@ var noteData = (function () {
      */
     NoteStorage.prototype.readNotes = function () {
         var notes = [];
-        var notesString = localStorage.getItem(this.notesKey);
+        var notesString = storage.getItem(this.notesKey);
         if (notesString != undefined) {
             var notesArray = JSON.parse(notesString);
             notesArray.forEach(function (noteObject) {
@@ -144,13 +143,13 @@ var noteData = (function () {
 
         function getNextId() {
             var nextId = 1;
-            var nextIdString = localStorage.getItem(self.noteIdKey);
+            var nextIdString = storage.getItem(self.noteIdKey);
             if(nextIdString != undefined) {
                 nextId = JSON.parse(nextIdString);
             }
 
             // Store the next nextId.
-            localStorage.setItem(self.noteIdKey, JSON.stringify(nextId + 1));
+            storage.setItem(self.noteIdKey, JSON.stringify(nextId + 1));
             return nextId;
         }
 
@@ -209,7 +208,7 @@ module.exports = noteData;
 // */
 //function testNoteStorage() {
 //
-//    //  localStorage.clear();
+//    //  storage.clear();
 //
 //    var ns = new NoteStorage();
 //
@@ -219,7 +218,7 @@ module.exports = noteData;
 //
 //    var t = nsExt instanceof NoteStorage;
 //
-////    localStorage.clear();
+////    storage.clear();
 //    //var note2 = new Note();
 //    //console.log(note2.title);
 //    //

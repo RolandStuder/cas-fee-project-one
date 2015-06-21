@@ -136,8 +136,27 @@ var noteData = (function () {
      *
      * @param {Note}  note   The note to update.
      */
-    NoteStorage.prototype.updateNote = function (note, noteCallback) {
+     NoteStorage.prototype.updateNote = function (note, noteCallback) {
         var noteString = JSON.stringify(note);
+
+        $.ajax({
+                url: 'http://localhost:3000/notes/' + note.id,
+                type: 'PUT',
+                data: noteString,
+                success: function (response) {
+                    if (noteCallback !== undefined) {
+                        console.log("Data: " + response + "\nStatus: " + status);
+
+                        noteCallback();
+                    }
+                    else {
+                        alert("Data: " + data + "\nStatus: " + status);
+                    }
+                },
+            }
+
+
+        );
 
         $.post('http://localhost:3000/notes/' + note.id, noteString, function (data, status) {
             if (noteCallback !== undefined) {

@@ -50,9 +50,18 @@ var utilities = (function() {
 
     }
 
+    function alertAjaxErrors() {
+        $(document).ajaxError(function( event, jqxhr, settings, thrownError ) {
+            if(thrownError || jqxhr.status) {
+                alert(thrownError + ", status: " + jqxhr.status);
+            }
+        });
+    }
+
     return {
         padLeft : padLeft,
-        getParametersFromSearchString : getParametersFromSearchString
+        getParametersFromSearchString : getParametersFromSearchString,
+        alertAjaxErrors : alertAjaxErrors
     }
 
 }());

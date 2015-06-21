@@ -37,7 +37,11 @@ router.newRoute('POST', '/notes', function (req, res, params) {
     res.end(JSON.stringify(note));
 });
 
-router.newRoute('POST', '/notes/:id', function (req, res, params) {
+
+/**
+ * Updates a note
+ */
+router.newRoute('PUT', '/notes/:id', function (req, res, params) {
     res.statusCode = 200;
     var body = '';
     req.on('data', function (data) {
@@ -62,9 +66,9 @@ router.newRoute('GET', '/settings', function (req, res, params) {
 });
 
 /**
- * Puts the notes settings
+ * Updates the notes settings
  */
-router.newRoute('POST', '/settings', function (req, res, params) {
+router.newRoute('PUT', '/settings', function (req, res, params) {
     res.statusCode = 200;
     var body = '';
     req.on('data', function (data) {
