@@ -49,7 +49,7 @@
           <input class='completed-checkbox' type="checkbox" value="completed"  id="completed{{id}}" {{#if completed}}checked{{/if}}>
         </label>
       </div>
-      <div class="note-date">{{formatDate due}}</div>
+      <div class="note-date">Erstellt am {{formatDate creationDate}}, fällig am {{formatDate due}}</div>
       <div class="note-importance">{{formatImportance importance}}</div>
       <p class="note-description">{{description}}</p>
       <a href="editNote.html?id={{id}}" class="button">Edit</a>

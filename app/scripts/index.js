@@ -5,14 +5,12 @@ var template = {
             settings.due = true
         } else {
             settings.due = false
-        }
-        ;
+        };
         if (settings.orderBy === 'importance') {
             settings.importance = true
         } else {
             settings.importance = false
-        }
-        ;
+        };
 
         var noteStorage = noteData.noteStorageSingleton.getInstance();
         noteStorage.readNotes(function (notes) {

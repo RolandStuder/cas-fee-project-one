@@ -15,24 +15,35 @@ var noteData = (function () {
     /**
      * Note constructor.
      *
+     * Notice: I am not sure if server and app should should share the note class definition.
+     *
      * @param {number} id The id of the note.
      * @param {string} title The title of the note.
-     * @param {string} description
-     * @param {number} importance
-     * @param {Date} due
-     * @param {boolean} completed
+     * @param {string} description The description of the note.
+     * @param {number} importance The importance level of the note (1-5).
+     * @param {Date} due The due date of the note.
+     * @param {boolean} completed Indicates if the note has been completed.
+     * @param {Date} creationDate The creation date of the note.
      * @constructor
      */
-    function Note(id, title, description, importance, due, completed) {
+    function Note(id, title, description, importance, due, completed, creationDate) {
         this.title = title;
         this.description = description;
         this.importance = Number(importance);
         this.due = new Date(due);
         this.completed = Boolean(completed);
         this.id = Number(id);
+        if(typeof creationDate == 'undefined') {
+         // Legacy note without creation date => use due.
+            this.creationDate = new Date(due);
+        }
+        else {
+            this.creationDate = new Date(creationDate);
+        }
     }
 
     Note.prototype.constructor = Note;
+
 
     /**
      * Converts a JSON note string to an instance of the Note class.
@@ -41,7 +52,14 @@ var noteData = (function () {
      */
     function stringToNote(noteString) {
         var noteObject = JSON.parse(noteString);
-        return new Note(noteObject.id, noteObject.title, noteObject.description, noteObject.importance, new Date(noteObject.due), noteObject.completed);
+        return new Note(
+            noteObject.id,
+            noteObject.title,
+            noteObject.description,
+            noteObject.importance,
+            new Date(noteObject.due),
+            noteObject.completed,
+            new Date(noteObject.creationDate));
     }
 
     /**
@@ -84,7 +102,14 @@ var noteData = (function () {
             var notesArray = JSON.parse(notesString);
             notesArray.forEach(function (noteObject) {
                 // Convert the noteObject to an instance of the class Note.
-                var note = new Note(noteObject.id, noteObject.title, noteObject.description, noteObject.importance, new Date(noteObject.due), noteObject.completed);
+                var note = new Note(
+                    noteObject.id,
+                    noteObject.title,
+                    noteObject.description,
+                    noteObject.importance,
+                    new Date(noteObject.due),
+                    noteObject.completed,
+                    new Date(noteObject.creationDate));
                 notes.push(note);
             });
         }
@@ -139,8 +164,6 @@ var noteData = (function () {
      */
     NoteStorage.prototype.createNote = function () {
 
-        var self = this;
-
         function getNextId() {
             var nextId = 1;
             var nextIdString = storage.getItem(self.noteIdKey);
@@ -153,7 +176,11 @@ var noteData = (function () {
             return nextId;
         }
 
-        var note = new Note(getNextId(), "", "", 3, new Date(), false);
+        var today = new Date();
+        var tomorrow = new Date();
+        tomorrow.setDate(today.getDate()+1);
+
+        var note = new Note(getNextId(), "", "", 3, tomorrow, false, today);
         return note;
     };
 

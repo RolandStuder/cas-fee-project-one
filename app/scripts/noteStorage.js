@@ -15,19 +15,21 @@ var noteData = (function () {
      *
      * @param {number} id The id of the note.
      * @param {string} title The title of the note.
-     * @param {string} description
-     * @param {number} importance
-     * @param {Date} due
-     * @param {boolean} completed
+     * @param {string} description The description of the note.
+     * @param {number} importance The importance level of the note (1-5).
+     * @param {Date} due The due date of the note.
+     * @param {boolean} completed Indicates if the note has been completed.
+     * @param {Date} creationDate The creation date of the note.
      * @constructor
      */
-    function Note(id, title, description, importance, due, completed) {
+    function Note(id, title, description, importance, due, completed, creationDate) {
         this.title = title;
         this.description = description;
         this.importance = Number(importance);
         this.due = new Date(due);
         this.completed = Boolean(completed);
         this.id = Number(id);
+        this.creationDate = new Date(creationDate);
     }
 
     Note.prototype.constructor = Note;
@@ -66,7 +68,15 @@ var noteData = (function () {
         if (notesArray != null) {
             notesArray.forEach(function (noteObject) {
                 // Convert the noteObject to an instance of the class Note.
-                var note = new Note(noteObject.id, noteObject.title, noteObject.description, noteObject.importance, new Date(noteObject.due), noteObject.completed);
+                var note = new Note(
+                    noteObject.id,
+                    noteObject.title,
+                    noteObject.description,
+                    noteObject.importance,
+                    new Date(noteObject.due),
+                    noteObject.completed,
+                    new Date(noteObject.creationDate));
+
                 notes.push(note);
             });
         }
@@ -80,7 +90,14 @@ var noteData = (function () {
      */
     function noteStringToNote(noteString) {
         var noteObject = JSON.parse(noteString);
-        return new Note(noteObject.id, noteObject.title, noteObject.description, noteObject.importance, new Date(noteObject.due), noteObject.completed);
+        return new Note(
+            noteObject.id,
+            noteObject.title,
+            noteObject.description,
+            noteObject.importance,
+            new Date(noteObject.due),
+            noteObject.completed,
+            new Date(noteObject.creationDate));
     }
 
     /**
@@ -96,7 +113,7 @@ var noteData = (function () {
     NoteStorage.prototype.readNotes = function (notesCallback) {
 
         $.get('http://localhost:3000/notes', function (data, status) {
-            if (notesCallback !== undefined) {
+            if (typeof notesCallback != 'undefined') {
                 var notes = notesStringToNotes(data);
                 notesCallback(notes);
             }
@@ -120,7 +137,7 @@ var noteData = (function () {
     NoteStorage.prototype.getNote = function (id, noteCallback) {
 
         $.get('http://localhost:3000/notes/' + id, function (data, status) {
-            if (noteCallback !== undefined) {
+            if (typeof noteCallback != 'undefined') {
                 var note = noteStringToNote(data);
                 noteCallback(note);
             }
@@ -136,48 +153,30 @@ var noteData = (function () {
      *
      * @param {Note}  note   The note to update.
      */
-     NoteStorage.prototype.updateNote = function (note, noteCallback) {
+    NoteStorage.prototype.updateNote = function (note, noteCallback) {
         var noteString = JSON.stringify(note);
 
         $.ajax({
                 url: 'http://localhost:3000/notes/' + note.id,
                 type: 'PUT',
                 data: noteString,
-                success: function (response) {
-                    if (noteCallback !== undefined) {
-                        console.log("Data: " + response + "\nStatus: " + status);
-
+                success: function (data, textStatus, jqXHR) {
+                    if (typeof noteCallback != 'undefined') {
                         noteCallback();
                     }
-                    else {
-                        alert("Data: " + data + "\nStatus: " + status);
-                    }
-                },
+                }
             }
-
-
         );
-
-        $.post('http://localhost:3000/notes/' + note.id, noteString, function (data, status) {
-            if (noteCallback !== undefined) {
-                console.log("Data: " + data + "\nStatus: " + status);
-
-                noteCallback();
-            }
-            else {
-                alert("Data: " + data + "\nStatus: " + status);
-            }
-        });
     };
 
     /**
      * Creates a new note with a unique id.
      *
-     * @param {noteCallback} noteCallback The callback function that is called when the notes the new note is created.
+     * @param {noteCallback} noteCallback The callback function that is called when the new note is created.
      */
     NoteStorage.prototype.createNote = function (noteCallback) {
         $.post('http://localhost:3000/notes', function (data, status) {
-            if (noteCallback !== undefined) {
+            if (typeof noteCallback != 'undefined') {
                 var note = noteStringToNote(data);
                 noteCallback(note);
             }

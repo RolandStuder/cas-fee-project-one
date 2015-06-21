@@ -35,6 +35,11 @@ var noteSettings = (function() {
      */
     Settings.orderByDue = 'due';
 
+    /**
+     * Predefined order by value.
+     * @type {string} Order by creation date.
+     */
+    Settings.orderByCreationDate = 'creationDate';
 
     /**
      * Converts a settings string to an instance of the class Settings.
@@ -79,12 +84,9 @@ var noteSettings = (function() {
             url: 'http://localhost:3000/settings',
             type: 'PUT',
             data: settingsString,
-            success: function (response) {
+            success: function (data, textStatus, jqXHR) {
                 if (typeof doneCallback != 'undefined') {
                     doneCallback();
-                }
-                else {
-                    alert("Data: " + data + "\nStatus: " + status);
                 }
             }
         });
