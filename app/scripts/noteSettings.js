@@ -5,9 +5,9 @@
 
 /**
  *  Notes settings module. Exposes functions to read and write the notes app settings and implicitly the Settings class.
-  * @type {{readSettings, updateSettings, Settings}}
+ * @type {{readSettings, updateSettings, Settings}}
  */
-var noteSettings = (function() {
+var noteSettings = (function () {
     "use strict";
 
     /**
@@ -16,7 +16,7 @@ var noteSettings = (function() {
      * @param {boolean} excludeCompletedNotes Indicates if the completed notes have to be excluded from the note list.
      * @constructor
      */
-    function Settings(orderBy, excludeCompletedNotes){
+    function Settings(orderBy, excludeCompletedNotes) {
         this.orderBy = String(orderBy || Settings.orderByImportance);
         this.excludeCompletedNotes = Boolean(excludeCompletedNotes);
     }
@@ -100,15 +100,18 @@ var noteSettings = (function() {
      * @param {settingsCallback} settingsCallback The callback that is called when the setting as available.
      */
     function readSettings(settingsCallback) {
-        $.get('http://localhost:3000/settings', function (data, status) {
-            if (typeof settingsCallback != 'undefined') {
-                var settings = settingsStringToSettings(data);
-                settingsCallback(settings);
+        $.ajax({
+                url: 'http://localhost:3000/settings',
+                type: 'GET',
+
+                success: function (data, textStatus, jqXHR) {
+                    if (typeof settingsCallback != 'undefined') {
+                        var settings = settingsStringToSettings(data);
+                        settingsCallback(settings);
+                    }
+                }
             }
-            else {
-                alert("Data: " + data + "\nStatus: " + status);
-            }
-        });
+        );
     }
 
     var settingsSingleton;
@@ -124,19 +127,24 @@ var noteSettings = (function() {
         /**
          *  Initializes the internal notes settings singleton instance.
          */
-        initializeSettings : initializeSettings,
+        initializeSettings: initializeSettings,
 
         /**
          *
          * @returns {Settings}  The settings singleton.
          */
-        getSettings : function () {return settingsSingleton},
+        getSettings: function () {
+            return settingsSingleton
+        },
 
         /**
          * Updates the settings singleton.
          */
-        updateSettings : function () {updateSettings(settingsSingleton, function(){})},
-        Settings : Settings
+        updateSettings: function () {
+            updateSettings(settingsSingleton, function () {
+            })
+        },
+        Settings: Settings
     }
 
 
