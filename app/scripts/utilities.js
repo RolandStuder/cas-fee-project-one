@@ -37,7 +37,7 @@ var utilities = (function() {
 
         var parameters = {};
 
-        var resultKeyValuePairs = keyValuePairs
+        keyValuePairs
             .map(function (keyValuePair) {
                 var keyAndValue = keyValuePair.split("=");
                 return {key: keyAndValue[0], value: keyAndValue.length === 2 ? keyAndValue[1] : undefined};

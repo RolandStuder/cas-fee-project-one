@@ -48,7 +48,7 @@ var noteData = (function () {
     /**
      * Converts a JSON note string to an instance of the Note class.
      *
-     * @param (string) noteString
+     * @param {string} noteString
      */
     function stringToNote(noteString) {
         var noteObject = JSON.parse(noteString);
@@ -164,6 +164,7 @@ var noteData = (function () {
      */
     NoteStorage.prototype.createNote = function () {
 
+        var self = this;
         function getNextId() {
             var nextId = 1;
             var nextIdString = storage.getItem(self.noteIdKey);
@@ -180,8 +181,7 @@ var noteData = (function () {
         var tomorrow = new Date();
         tomorrow.setDate(today.getDate()+1);
 
-        var note = new Note(getNextId(), "", "", 3, tomorrow, false, today);
-        return note;
+        return new Note(getNextId(), "", "", 3, tomorrow, false, today);
     };
 
     NoteStorage.prototype.constructor = NoteStorage;

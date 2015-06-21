@@ -24,13 +24,13 @@ function Router(){
     };
 
     var requestHandler = function (req, res) {
-        var result = "";
+
 
         var pathname = url.parse(req.url).pathname;
 
         for (var i = 0; i < routes.length; i++) {
             var route = routes[i];
-            params = matchUrlWithPattern(pathname,route.pattern);
+            var params = matchUrlWithPattern(pathname,route.pattern);
             if(params && route.method === req.method) {
                 route.callback(req,res,params);
                 break;
@@ -58,7 +58,7 @@ function getExtractionPattern (pattern) {
 
     pathnameFragments.forEach(function(fragment, index){
         if (fragment.match(paramPattern)) {
-            match = fragment.match(paramPattern);
+            var match = fragment.match(paramPattern);
             result.params[position] = match[1];
             position++;
         }
@@ -83,7 +83,7 @@ function matchUrlWithPattern (requestUrl,extractionPattern) {
     }
     else {
         return false;
-    };
+    }
 }
 
 function trimEndSlash(string) {

@@ -1,17 +1,6 @@
 var template = {
     render: function () {
         var settings = noteSettings.getSettings();
-        if (settings.orderBy === 'due') {
-            settings.due = true
-        } else {
-            settings.due = false
-        };
-        if (settings.orderBy === 'importance') {
-            settings.importance = true
-        } else {
-            settings.importance = false
-        };
-
         var noteStorage = noteData.noteStorageSingleton.getInstance();
         noteStorage.readNotes(function (notes) {
             notes = orderAndFilterNotes(notes, settings);
@@ -44,7 +33,7 @@ function orderAndFilterNotes(notes, settings) {
 
     if (settings.excludeCompletedNotes) {
         notes = notes.filter(function (note) {
-            return !note.completed
+            return !note.completed;
         });
     }
     if (settings.orderBy === noteSettings.Settings.orderByDue) {
@@ -53,10 +42,16 @@ function orderAndFilterNotes(notes, settings) {
             return note2.due - note1.due;
         })
     }
+    else if (settings.orderBy === noteSettings.Settings.orderByCreationDate) {
+        notes.sort(function (note1, note2) {
+            // Descending.
+            return note2.creationDate - note1.creationDate;
+        })
+    }
     else if (settings.orderBy === noteSettings.Settings.orderByImportance) {
         // Descending.
         notes.sort(function (note1, note2) {
-            return note2.importance - note1.importance
+            return note2.importance - note1.importance;
         })
     }
     return notes;
@@ -109,6 +104,40 @@ function initializeHandleBars() {
         return Array(importance + 1).join('*' /*String.fromCharCode(0x26A1)*/);
     });
 
+    var isActive = 'is-active';
+    var isNotActive = 'is-not-active';
+
+    function getIsActiveClass(orderBy) {
+        var settings = noteSettings.getSettings();
+        if(settings.orderBy == orderBy){
+            return isActive;
+        }
+        else {
+            return isNotActive;
+        }
+    }
+
+    /**
+     * Returns the is-active / is-not-active class of the due order by button.
+     */
+    Handlebars.registerHelper("orderByDueIsActive", function () {
+        return getIsActiveClass(noteSettings.Settings.orderByDue)
+    });
+
+    /**
+     * Returns the is-active / is-not-active class of the importance order by button.
+     */
+    Handlebars.registerHelper("orderByImportanceIsActive", function () {
+        return getIsActiveClass(noteSettings.Settings.orderByImportance)
+    });
+
+    /**
+     * Returns the is-active / is-not-active class of the creation date order by button.
+     */
+    Handlebars.registerHelper("orderByCreationDateIsActive", function () {
+        return getIsActiveClass(noteSettings.Settings.orderByCreationDate)
+    });
+
     noteListTemplate = Handlebars.compile(document.getElementById('noteListTemplate').innerHTML);
     indexHeaderTemplate = Handlebars.compile(document.getElementById('indexHeader').innerHTML);
 
@@ -124,15 +153,20 @@ $(function () {
         initializeHandleBars();
         template.render();
 
-        template.afterRender = function () { //callback function in renderPAge
+        template.afterRender = function () { //callback function in renderPage
 
             initializeCompletedFilter();
 
             document.getElementById("new-note").onclick = function () {
                 window.location.replace('editNote.html')
             };
+
             document.getElementById("order-by-due").onclick = function () {
                 setNotesOrderBy(noteSettings.Settings.orderByDue);
+            };
+
+            document.getElementById("order-by-creation-date").onclick = function () {
+                setNotesOrderBy(noteSettings.Settings.orderByCreationDate);
             };
 
             document.getElementById("order-by-importance").onclick = function () {

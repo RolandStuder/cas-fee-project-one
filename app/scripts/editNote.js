@@ -158,7 +158,7 @@ function initialize() {
         targets.each(function(){
             if (this.value.length > 0)
                 $('[for='+this.id+']').addClass('is-floated');
-        })
+        });
         targets.on('focus', function(){
             $('[for='+this.id+']').addClass('is-floated');
         });

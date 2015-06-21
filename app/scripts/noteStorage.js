@@ -47,8 +47,6 @@ var noteData = (function () {
 
 
 // Private stuff.
-
-        this.useLocalStorage = false;
         $.ajaxSetup({
             // Disable caching of AJAX responses.
             cache: false
@@ -60,7 +58,7 @@ var noteData = (function () {
     /**
      * Converts a JSON notes string to an array of instances of the Note class.
      *
-     * @param (string) notesString
+     * @param {string} notesString  The string to convert.
      */
     function notesStringToNotes(notesString) {
         var notes = [];
@@ -86,7 +84,7 @@ var noteData = (function () {
     /**
      * Converts a JSON note string to an instance of the Note class.
      *
-     * @param (string) noteString
+     * @param {string} noteString
      */
     function noteStringToNote(noteString) {
         var noteObject = JSON.parse(noteString);
@@ -147,13 +145,18 @@ var noteData = (function () {
         });
     };
 
+    /**
+     * @callback doneCallback A simple callback without parameter that indicates that a async function has completed.
+     */
+
 
     /**
      * Updates an existing note.
      *
      * @param {Note}  note   The note to update.
+     * @param {doneCallback} doneCallback Called when the note is updated.
      */
-    NoteStorage.prototype.updateNote = function (note, noteCallback) {
+    NoteStorage.prototype.updateNote = function (note, doneCallback) {
         var noteString = JSON.stringify(note);
 
         $.ajax({
@@ -161,8 +164,8 @@ var noteData = (function () {
                 type: 'PUT',
                 data: noteString,
                 success: function (data, textStatus, jqXHR) {
-                    if (typeof noteCallback != 'undefined') {
-                        noteCallback();
+                    if (typeof doneCallback != 'undefined') {
+                        doneCallback();
                     }
                 }
             }
