@@ -159,7 +159,7 @@ function testRequest(method, path, postData) {
 }
 
 //testRequest('GET', '/settings');
-//testRequest('POST', '/settings', new noteSettings.Settings(noteSettings.Settings.orderByDue, true));
+//testRequest('POST', '/settings', new appSettings.Settings(appSettings.Settings.orderByDue, true));
 
 //testRequest('GET', '/notes');
 //testRequest('GET', '/notes/1');

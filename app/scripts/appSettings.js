@@ -7,7 +7,7 @@
  *  Notes settings module. Exposes functions to read and write the notes app settings and implicitly the Settings class.
  * @type {{readSettings, updateSettings, Settings}}
  */
-var noteSettings = (function () {
+var appSettings = (function () {
     "use strict";
 
     /**
@@ -16,9 +16,10 @@ var noteSettings = (function () {
      * @param {boolean} excludeCompletedNotes Indicates if the completed notes have to be excluded from the note list.
      * @constructor
      */
-    function Settings(orderBy, excludeCompletedNotes) {
+    function Settings(orderBy, excludeCompletedNotes, theme) {
         this.orderBy = String(orderBy || Settings.orderByImportance);
         this.excludeCompletedNotes = Boolean(excludeCompletedNotes);
+        this.theme = theme || 'style';
     }
 
     Settings.prototype.constructor = Settings;
@@ -49,7 +50,7 @@ var noteSettings = (function () {
      */
     function settingsStringToSettings(settingsString) {
         var settingsObject = JSON.parse(settingsString);
-        return new Settings(settingsObject.orderBy, settingsObject.excludeCompletedNotes);
+        return new Settings(settingsObject.orderBy, settingsObject.excludeCompletedNotes, settingsObject.theme);
     }
 
     /**

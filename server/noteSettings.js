@@ -6,7 +6,7 @@ var Storage = require('./keyValueStorage');
 
 
 /**
- *  @module noteSettings
+ *  @module appSettings
  *
  *  Notes settings module. Exposes functions to read and write the notes app settings and implicitly the Settings class.
  */

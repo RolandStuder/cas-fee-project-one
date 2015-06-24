@@ -60,6 +60,7 @@ a {
 
 button {
     text-transform: uppercase;
+    outline: none;
 }
 
 .note-importance {
