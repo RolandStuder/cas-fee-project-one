@@ -188,13 +188,16 @@ function initialize() {
 
     initializeCommands();
     enableFloatingLabels();
+    appSettings.initializeSettings(function(){
+        var settings = appSettings.getSettings();
+        themeSwitcher.loadTheme('style2');
+        $('.header-layout-switcher').on('click',function(){
+            themeSwitcher.toggleTheme()
+        });
+    });
+
 
     // Button event handlers.
-
-    function toggleStyle() {
-        themeSwitcher.toggleTheme();
-    }
-
     function backToStartPage() {
         window.location.replace('index.html');
     }
@@ -207,8 +210,6 @@ function initialize() {
             backToStartPage();
         }
     }
-
-    themeSwitcher.loadTheme();
 }
 
 $(function () {
@@ -219,6 +220,8 @@ $(function () {
 
             // Initialize page.
             initialize();
+
+
         }
         catch (exception) {
             console.error(exception);

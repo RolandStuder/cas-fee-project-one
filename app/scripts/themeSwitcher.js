@@ -3,7 +3,7 @@
  */
 
 var themeSwitcher = (function(){
-    function toggleCSS() {
+    function toggleTheme() {
         var settings = appSettings.getSettings();
         if (settings.theme === 'style') {
             settings.theme = 'style2';
@@ -11,7 +11,7 @@ var themeSwitcher = (function(){
             settings.theme = 'style';
         }
         appSettings.updateSettings(settings);
-        template.render();
+        loadTheme();
     }
 
     function loadTheme(){
@@ -24,7 +24,7 @@ var themeSwitcher = (function(){
     }
 
     return {
-        toggleTheme: toggleCSS,
+        toggleTheme: toggleTheme,
         loadTheme: loadTheme
     }
 })();
