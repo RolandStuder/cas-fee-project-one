@@ -1,7 +1,7 @@
 var template = {
     render: function () {
         var settings = appSettings.getSettings();
-        loadTheme();
+        themeSwitcher.loadTheme();
         var noteStorage = noteData.noteStorageSingleton.getInstance();
         noteStorage.readNotes(function (notes) {
             notes = orderAndFilterNotes(notes, settings);
@@ -67,17 +67,6 @@ function setNotesOrderBy(orderBy) {
     var settings = appSettings.getSettings();
     settings.orderBy = orderBy;
     appSettings.updateSettings();
-    template.render();
-}
-
-function toggleCSS() {
-    var settings = appSettings.getSettings();
-    if (settings.theme === 'style') {
-        settings.theme = 'style2';
-    } else {
-        settings.theme = 'style';
-    }
-    appSettings.updateSettings(settings);
     template.render();
 }
 
@@ -155,15 +144,6 @@ function initializeHandleBars() {
 
 }
 
-function loadTheme(){
-    var settings = appSettings.getSettings();
-    var themePath = "css/" + settings.theme + ".css";
-    var linkThemeCss = $('head link[name="theme"]');
-    if (linkThemeCss.attr('href') != themePath) { // only change path, if it is actually different, otherwise flashing occurs on every render
-        linkThemeCss.attr('href', themePath)
-    }
-}
-
 // execute on load
 
 $(function () {
@@ -193,7 +173,7 @@ $(function () {
                 setNotesOrderBy(appSettings.Settings.orderByImportance);
             };
             $('.header-layout-switcher').on('click',  function() {
-                toggleCSS();
+                themeSwitcher.toggleTheme();
             });
 
         };

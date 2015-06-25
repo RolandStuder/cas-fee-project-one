@@ -11,7 +11,7 @@
 
     <!--Create Commands div with handle bar.-->
     {{#each this}}
-    <button id="{{commandId}}" type="{{type}}">{{caption}}</button>
+      <button id="{{commandId}}" type="{{type}}" class="{{class}}">{{caption}}</button>
     {{/each}}
 
   </script>
@@ -19,6 +19,7 @@
 <body>
 <header>
   <h1>Notes</h1>
+  <button class="header-button header-layout-switcher"><i class="fa fa-tint"></i> Switch theme</button>
 </header>
 <main>
   <form method="get">
@@ -69,9 +70,10 @@
   </form>
 </main>
 
-
+<script src="scripts/appSettings.js" type="text/javascript"></script>
 <script src="scripts/utilities.js" type="text/javascript"></script>
 <script src="scripts/noteStorage.js" type="text/javascript"></script>
+<script src="scripts/themeSwitcher.js" type="text/javascript"></script>
 <script src="scripts/editNote.js" type="text/javascript"></script>
 </body>
 </html>

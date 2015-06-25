@@ -59,6 +59,10 @@ button {
     outline: none;
 }
 
+button.secondary-action {
+    border: none;
+}
+
 .note-importance {
     font-weight: bold;
     font-size: larger;

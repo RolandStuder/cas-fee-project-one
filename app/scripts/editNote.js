@@ -136,9 +136,8 @@ function initialize() {
 
         // The available commands.
         var commands = [
-            {'commandId' : 'save', type: 'submit', 'caption' : 'Speichern', click : save},
-            {'commandId' : 'toggle-style', type: 'button', 'caption' : 'Toggle Style', click : toggleStyle},
-            {'commandId' : 'cancel', type: 'button', 'caption' : 'Abbruch', click : backToStartPage}
+            {'commandId' : 'save', type: 'submit', 'caption' : 'Speichern', click : save, class: 'primary-action'},
+            {'commandId' : 'cancel', type: 'button', 'caption' : 'Abbruch', click : backToStartPage, class: 'secondary-action'}
         ];
 
         // Set the commands html with handle bar.
@@ -193,28 +192,7 @@ function initialize() {
     // Button event handlers.
 
     function toggleStyle() {
-
-        var styleSheet1 = 'css/style.css';
-        var styleSheet2 = 'css/style2.css';
-
-        var stylesheet = $('#stylesheet');
-        var inputsToSwap = $('.label-field>input, .label-field>textarea');
-
-        if ($(stylesheet).attr('href') === styleSheet1) {
-            $(stylesheet).attr('href', styleSheet2);
-
-            $(inputsToSwap).each(function (index, element) {
-                $(element).insertAfter($(element).next())
-            });
-
-        }
-        else {
-            $(stylesheet).attr('href', styleSheet1);
-            $(inputsToSwap).each(function (index, element) {
-                $(element).insertBefore($(element).prev())
-            });
-
-        }
+        themeSwitcher.toggleTheme();
     }
 
     function backToStartPage() {
@@ -229,6 +207,8 @@ function initialize() {
             backToStartPage();
         }
     }
+
+    themeSwitcher.loadTheme();
 }
 
 $(function () {
@@ -241,6 +221,7 @@ $(function () {
             initialize();
         }
         catch (exception) {
+            console.error(exception);
             alert('Es ist ein Fehler aufgetreten:\n' + exception.toString());
         }
     }
