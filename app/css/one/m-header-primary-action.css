@@ -18,6 +18,8 @@
 
 
     box-shadow: 0 0.2em 0.2em rgba(130,130,130,0.5);
+
+    transition: all 500ms;
 }
 
 .header-primary-action:before {

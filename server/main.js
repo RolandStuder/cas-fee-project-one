@@ -8,7 +8,7 @@ var fs = require('fs');
 var path = require('path');
 var Router = require('./Router');
 var noteData = require('./noteStorage');
-var noteSettings = require('./noteSettings');
+var noteSettings = require('./appSettings');
 
 var router = new Router();
 var notes = new noteData.NoteStorage(); // was not able to do this via the singleton, as it does not return a function.

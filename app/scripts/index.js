@@ -1,6 +1,7 @@
 var template = {
     render: function () {
         var settings = appSettings.getSettings();
+        loadTheme();
         var noteStorage = noteData.noteStorageSingleton.getInstance();
         noteStorage.readNotes(function (notes) {
             notes = orderAndFilterNotes(notes, settings);
@@ -157,7 +158,10 @@ function initializeHandleBars() {
 function loadTheme(){
     var settings = appSettings.getSettings();
     var themePath = "css/" + settings.theme + ".css";
-    $('head link[name="theme"]').attr('href', themePath);
+    var linkThemeCss = $('head link[name="theme"]');
+    if (linkThemeCss.attr('href') != themePath) { // only change path, if it is actually different, otherwise flashing occurs on every render
+        linkThemeCss.attr('href', themePath)
+    }
 }
 
 // execute on load
@@ -171,8 +175,6 @@ $(function () {
         template.render();
 
         template.afterRender = function () { //callback function in renderPage
-            loadTheme();
-            console.log(appSettings.getSettings());
             initializeCompletedFilter();
 
             document.getElementById("new-note").onclick = function () {

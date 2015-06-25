@@ -15,10 +15,6 @@ and body backgrounds. There should be no need to use !important in a Base style.
 
 
 *, *:before, *:after {
-    transition: all 500ms;
-}
-
-*, *:before, *:after {
     box-sizing: border-box;
 }
 

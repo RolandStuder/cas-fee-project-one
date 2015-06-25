@@ -18,9 +18,10 @@ var noteSettings = (function() {
      * @param {boolean} excludeCompletedNotes Indicates if the completed notes have to be excluded from the note list.
      * @constructor
      */
-    function Settings(orderBy, excludeCompletedNotes){
+    function Settings(orderBy, excludeCompletedNotes, theme){
         this.orderBy = String(orderBy || Settings.orderByImportance);
         this.excludeCompletedNotes = Boolean(excludeCompletedNotes);
+        this.theme = theme || 'style';
     }
 
     Settings.prototype.constructor = Settings;
@@ -57,7 +58,7 @@ var noteSettings = (function() {
         }
         else {
             var settingsObject = JSON.parse(settingsString);
-            return new Settings(settingsObject.orderBy, settingsObject.excludeCompletedNotes);
+            return new Settings(settingsObject.orderBy, settingsObject.excludeCompletedNotes, settingsObject.theme);
         }
     }
 
