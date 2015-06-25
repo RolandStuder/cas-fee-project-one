@@ -8,9 +8,9 @@ var Storage = require('./keyValueStorage');
 /**
  *  @module appSettings
  *
- *  Notes settings module. Exposes functions to read and write the notes app settings and implicitly the Settings class.
+ *  App settings module. Exposes functions to read and write the notes app settings and implicitly the Settings class.
  */
-var noteSettings = (function() {
+var appSettings = (function() {
     "use strict";
 
     /**
@@ -40,8 +40,8 @@ var noteSettings = (function() {
 
 
 
-    var settingsKey = 'noteSettings';
-    var settingsStorageName = 'noteSettings';
+    var settingsKey = 'appSettings';
+    var settingsStorageName = 'appSettings';
 
     function updateSettings(settings) {
         var settingsString = JSON.stringify(settings);
@@ -71,4 +71,4 @@ var noteSettings = (function() {
 
 }());
 
-module.exports = noteSettings;
+module.exports = appSettings;
