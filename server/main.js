@@ -9,6 +9,8 @@ var path = require('path');
 var Router = require('./Router');
 var noteData = require('./noteStorage');
 var noteSettings = require('./appSettings');
+var Storage = require('./keyValueStorage');
+
 
 var router = new Router();
 var notes = new noteData.NoteStorage(); // was not able to do this via the singleton, as it does not return a function.
@@ -32,7 +34,6 @@ router.newRoute('GET', '/notes/:id', function (req, res, params) {
  */
 router.newRoute('POST', '/notes', function (req, res, params) {
     res.statusCode = 200;
-//    console.log(req.body);
     var note = notes.createNote(); // need to read post data here
     res.end(JSON.stringify(note));
 });
@@ -114,6 +115,11 @@ router.newRoute('GET', '.*', function (req, res, params) {
 
 
 var server = http.createServer(router.requestHandler);
+
+
+// initialize dbs on startup
+new Storage('noteStorage');
+new Storage('appSettings');
 
 server.listen('3000');
 console.log('running server on localhost:3000');

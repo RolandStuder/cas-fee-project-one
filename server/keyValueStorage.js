@@ -30,19 +30,16 @@ function Storage(name) {
     }
 }
 
-
 function createDbFile(name) {
     if (!(fs.existsSync('db'))) {
         fs.mkdirSync('db');
     }
-
     var dbPath = "db/" + name + ".db";
-
     if (!(fs.existsSync(dbPath))) {
         fs.writeFileSync(dbPath,'{}')
     }
-
     return dbPath;
 }
+
 
 module.exports = Storage;
