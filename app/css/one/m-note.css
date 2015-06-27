@@ -36,3 +36,8 @@
 .note-date {
     clear: both;
 }
+
+.note-importance {
+    font-weight: bold;
+    font-size: larger;
+}

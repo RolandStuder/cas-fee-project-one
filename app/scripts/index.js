@@ -20,6 +20,7 @@ var template = {
                     note.completed = checkBox.checked;
                     noteStorage.updateNote(note, function (note) {
                     });
+                    template.render();
 
                 });
             });
@@ -70,17 +71,11 @@ function setNotesOrderBy(orderBy) {
     template.render();
 }
 
-function initializeCompletedFilter() {
+function toggleExcludeCompletedNotes(){
     var settings = appSettings.getSettings();
-    var checkBox = $('.completed-filter-checkbox')[0];
-    checkBox.checked = settings.excludeCompletedNotes;
-
-    $(checkBox).change(function () {
-        var settings = appSettings.getSettings();
-        settings.excludeCompletedNotes = checkBox.checked;
-        appSettings.updateSettings();
-        template.render();
-    });
+    settings.excludeCompletedNotes = !settings.excludeCompletedNotes;
+    appSettings.updateSettings();
+    template.render();
 }
 
 var noteListTemplate;
@@ -155,7 +150,6 @@ $(function () {
         template.render();
 
         template.afterRender = function () { //callback function in renderPage
-            initializeCompletedFilter();
 
             document.getElementById("new-note").onclick = function () {
                 window.location.replace('editNote.html')
@@ -172,6 +166,10 @@ $(function () {
             document.getElementById("order-by-importance").onclick = function () {
                 setNotesOrderBy(appSettings.Settings.orderByImportance);
             };
+            document.getElementById("exclude-completed-notes").onclick = function () {
+                toggleExcludeCompletedNotes();
+            };
+
             $('.header-layout-switcher').on('click',  function() {
                 themeSwitcher.toggleTheme();
             });

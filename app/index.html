@@ -27,15 +27,9 @@
     <button id="order-by-creation-date" class="header-button {{orderByCreationDateIsActive}}" type="button">Erstellungsdatum</button>
     <button id="order-by-importance" class="header-button {{orderByImportanceIsActive}}" type="button">Wichtigkeit</button>
     {{#if excludeCompletedNotes}}
-      <label for="completed-filter" class="header-button is-active">
-        Erledigte einblenden
-        <input class='completed-filter-checkbox' type="checkbox" value="completed" id="completed-filter">
-      </label>
+      <button id="exclude-completed-notes" class="header-button {{excludeCompletedNotes}}" type="button">Vollständige einblenden</button>
     {{else}}
-      <label for="completed-filter" class="header-button">
-        Erledigte ausblenden
-        <input class='completed-filter-checkbox' type="checkbox" value="completed" id="completed-filter">
-      </label>
+      <button id="exclude-completed-notes" class="header-button {{excludeCompletedNotes}}" type="button">Vollständige ausblenden</button>
     {{/if}}
   </div>
 </script>
