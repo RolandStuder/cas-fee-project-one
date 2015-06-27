@@ -7,7 +7,7 @@
  *
  * @param {Note} note The source note.
  */
-function setNote(note) {
+function displayNoteDataInForm(note) {
 
     $(titleElement()).val(note.title);
     $(descriptionElement()).val(note.description);
@@ -169,13 +169,13 @@ function initialize() {
 
     var noteStorage = noteData.noteStorageSingleton.getInstance();
 
-    var parameters = utilities.getParametersFromSearchString(window.location.search);
+    var parameters = utilities.getParametersFromQueryString(window.location.search);
 
     var note;
 
     function noteAvailable(noteFromStorage) {
         note = noteFromStorage;
-        setNote(note);
+        displayNoteDataInForm(note);
     }
 
     if ('id' in parameters) {

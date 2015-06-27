@@ -31,7 +31,7 @@ var utilities = (function() {
      * If a value is not specified in the search string then an object property is created with the value undefined.
      *
      */
-    function getParametersFromSearchString(searchString) {
+    function getParametersFromQueryString(searchString) {
         var noQuestionMark = searchString.substr(1);
         var keyValuePairs = noQuestionMark.split("&");
 
@@ -60,7 +60,7 @@ var utilities = (function() {
 
     return {
         padLeft : padLeft,
-        getParametersFromSearchString : getParametersFromSearchString,
+        getParametersFromQueryString : getParametersFromQueryString,
         alertAjaxErrors : alertAjaxErrors
     }
 

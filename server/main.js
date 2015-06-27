@@ -24,7 +24,7 @@ router.newRoute('GET', '/notes', function (req, res, params) {
 
 router.newRoute('GET', '/notes/:id', function (req, res, params) {
     res.statusCode = 200;
-    var note = notes.getNote(params['id']);
+        var note = notes.getNote(params['id']);
     res.end(JSON.stringify(note));
 });
 
@@ -57,7 +57,6 @@ router.newRoute('PUT', '/notes/:id', function (req, res, params) {
     req.on('end', function () {
         notes.updateNote(noteData.stringToNote(body));
         res.end("updated");
-
     });
 });
 
