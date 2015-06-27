@@ -1,25 +1,33 @@
+form {
+    background-color: white;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+    max-width: 50em;
+    padding: 1em 1em 3em 1em;
+}
 
-button, .button {
+
+form button, form .button {
     display: inline-block;
     color: #747474;
     background-color: #fefefe;
     border: 1px solid #747474;
     padding: 1em;
     margin: 0;
+
 }
 
-button:hover, .button:hover {
+form button:hover, form .button:hover {
     color: #fefefe;
     background-color: #747474;
 }
 
-button.inverted, .button.inverted {
+form button.inverted, form .button.inverted {
     color: #fefefe;
     background-color: #747474;
     border: 1px solid #fefefe;
 }
 
-button.inverted:hover, .button.inverted:hover {
+form button.inverted:hover, form .button.inverted:hover {
     color: #747474;
     background-color: #fefefe;
 }

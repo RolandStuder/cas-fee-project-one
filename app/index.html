@@ -19,19 +19,18 @@
 
 <!-- Templates-->
 <script id="indexHeader" type="text/x-handlebars-template">
-  <h1>Notes</h1>
+  <h1><a href="/">Notes</a></h1>
   <button class="header-button header-layout-switcher"><i class="fa fa-tint"></i> Switch theme</button>
   <i class="fa fa-plus header-primary-action" id="new-note"></i>
   <div class="header-commands">
-    <button id="order-by-due" class="header-button {{orderByDueIsActive}}" type="button">Fälligkeitsdatum</button>
-    <button id="order-by-creation-date" class="header-button {{orderByCreationDateIsActive}}" type="button">Erstellungsdatum</button>
-    <button id="order-by-importance" class="header-button {{orderByImportanceIsActive}}" type="button">Wichtigkeit</button>
-    {{#if excludeCompletedNotes}}
-      <button id="exclude-completed-notes" class="header-button {{excludeCompletedNotes}}" type="button">Vollständige einblenden</button>
-    {{else}}
-      <button id="exclude-completed-notes" class="header-button {{excludeCompletedNotes}}" type="button">Vollständige ausblenden</button>
-    {{/if}}
-  </div>
+    <div class="header-button-group">
+      <button data-action="order" data-order-by="due" class="header-button {{orderByDueIsActive}}" type="button">Fälligkeitsdatum</button>
+      <button data-action="order" data-order-by="creationDate" class="header-button {{orderByCreationDateIsActive}}" type="button">Erstellungsdatum</button>
+      <button data-action="order" data-order-by="importance" class="header-button {{orderByImportanceIsActive}}" type="button">Wichtigkeit</button>
+    </div>
+    <button data-action="exclude-completed-notes" class="header-button is-active {{excludeCompletedNotes}}" type="button">
+      {{#if excludeCompletedNotes}}Verbleibende{{else}}Alle{{/if}}
+    </button>
 </script>
 
 <script id="noteListTemplate" type="text/x-handlebars-template">
@@ -39,16 +38,14 @@
     {{#each this}}
     <div class="note" id="{{id}}">
       <h3>{{title}}</h3>
-      <div class="note-completion">
-        <label for="completed{{id}}">
-          erledigt
-          <input class='completed-checkbox' type="checkbox" value="completed"  id="completed{{id}}" {{#if completed}}checked{{/if}}>
-        </label>
+      <div class="note-completion {{#if completed}}note-is-completed{{else}}note-is-not-completed{{/if}}" id="completed{{id}}">
+        <i class="fa fa-check"></i>
       </div>
-      <div class="note-date">Erstellt am {{formatDate creationDate}}, fällig am {{formatDate due}}</div>
       <div class="note-importance">{{formatImportance importance}}</div>
       <p class="note-description">{{description}}</p>
       <a href="editNote.html?id={{id}}" class="button">Edit</a>
+      <div class="note-due-date">Fällig {{formatDate due}}</div>
+      <div class="note-creation-date">Erstellt {{formatDate creationDate}}</div>
     </div>
     {{/each}}
   </section>
@@ -59,7 +56,7 @@
 <script src="scripts/utilities.js" type="text/javascript"></script>
 <script src="scripts/noteStorage.js" type="text/javascript"></script>
 <script src="scripts/themeSwitcher.js" type="text/javascript"></script>
-<script src="scripts/index.js" type="text/javascript"></script>
+<script src="scripts/for-index.js" type="text/javascript"></script>
 
 </body>
 </html>

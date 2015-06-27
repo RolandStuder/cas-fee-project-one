@@ -1,5 +1,7 @@
 /**
- * Async KeyValueStorage
+ * Sync KeyValueStorage
+ *
+ * Notice: Would be better async. But this would change the API and a lot would have to be adjusted.
  *
  */
 
@@ -40,6 +42,5 @@ function createDbFile(name) {
     }
     return dbPath;
 }
-
 
 module.exports = Storage;

@@ -7,23 +7,6 @@ var template = {
             notes = orderAndFilterNotes(notes, settings);
             $('header').empty().html(indexHeaderTemplate(settings));
             $(getMainElement()).empty().html(noteListTemplate(notes));
-
-            // Note completed checkbox event handling.
-            $('.completed-checkbox').change(function (event) {
-
-                // Update the note's completed property and store
-                // it in the note storage.
-                var checkBox = $(event.currentTarget)[0];
-                var noteElement = $(checkBox).parents('.note')[0];
-                var id = Number($(noteElement).attr('id'));
-                noteStorage.getNote(id, function (note) {
-                    note.completed = checkBox.checked;
-                    noteStorage.updateNote(note, function (note) {
-                    });
-                    template.render();
-
-                });
-            });
             template.afterRender();
         });
     }
@@ -139,40 +122,52 @@ function initializeHandleBars() {
 
 }
 
-// execute on load
+function attachEventHandlers(){
 
+    var noteStorage = noteData.noteStorageSingleton.getInstance();
+
+    $("#new-note").on('click',function () {
+        window.location.replace('editNote.html')
+    });
+
+    $("[data-action='order']").on('click', function(){
+        var orderBy = $(this).attr('data-order-by');
+        setNotesOrderBy(orderBy);
+    });
+
+    $("[data-action='exclude-completed-notes']").on('click', function(){
+        toggleExcludeCompletedNotes();
+        console.log('click');
+    });
+
+    $('.note-completion').on('click', function (event) {
+        // Update the note's completed property and store
+        // it in the note storage.
+        var noteElement = $(this).parents('.note')[0];
+        var id = Number($(noteElement).attr('id'));
+        noteStorage.getNote(id, function (note) {
+            note.completed = !note.completed;
+            noteStorage.updateNote(note, function (note) {
+            });
+            template.render();
+        });
+    });
+
+
+    $('.header-layout-switcher').on('click',  function() {
+        themeSwitcher.toggleTheme();
+    });
+}
+
+// execute on load
 $(function () {
 
     utilities.alertAjaxErrors();
-
     appSettings.initializeSettings(function () {
         initializeHandleBars();
         template.render();
-
         template.afterRender = function () { //callback function in renderPage
-
-            document.getElementById("new-note").onclick = function () {
-                window.location.replace('editNote.html')
-            };
-
-            document.getElementById("order-by-due").onclick = function () {
-                setNotesOrderBy(appSettings.Settings.orderByDue);
-            };
-
-            document.getElementById("order-by-creation-date").onclick = function () {
-                setNotesOrderBy(appSettings.Settings.orderByCreationDate);
-            };
-
-            document.getElementById("order-by-importance").onclick = function () {
-                setNotesOrderBy(appSettings.Settings.orderByImportance);
-            };
-            document.getElementById("exclude-completed-notes").onclick = function () {
-                toggleExcludeCompletedNotes();
-            };
-
-            $('.header-layout-switcher').on('click',  function() {
-                themeSwitcher.toggleTheme();
-            });
+            attachEventHandlers();
 
         };
     })

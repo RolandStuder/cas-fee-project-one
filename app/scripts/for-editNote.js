@@ -185,7 +185,6 @@ function initialize() {
         noteStorage.newNote(noteAvailable);
     }
 
-
     initializeCommands();
     enableFloatingLabels();
     appSettings.initializeSettings(function(){

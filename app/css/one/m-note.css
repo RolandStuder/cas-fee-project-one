@@ -1,43 +1,83 @@
 .note {
-    border-top: 1px solid #B6B6B6;
+    border-top: 1px solid #e3e3e3;
     margin: 0em 0em;
-    padding: 1em 0em 1em;
+    padding: 1em 1em 1em 5em;
     position: relative;
+    background-color: white;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+    max-width: 50em;
+    overflow: hidden;
+}
+
+.note:first-child {
+    z-index: 0;
 }
 
 .note:last-child {
-    border-bottom: 1px solid #B6B6B6;
+    border-bottom: 1px solid #e3e3e3;
 }
 
 .note .button{
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    width: 4em;
-    transition: all 500ms;
+    transition: all 250ms;
+    text-transform: uppercase;
+    color: #3F51B5;
+    font-weight: 700;
+    float: left;
 }
 
-.note:hover .button  {
-    color: #fefefe;
-    background-color: #747474;
+.note .button:hover {
+    color: #FF4081;
 }
 
 .note-completion {
-    width: auto;
-    float: left;
+    position: absolute;
+    display: table-cell;
+    vertical-align: middle;
+    left: 0em;
+    top: 0em;
+    width: 4em;
+    bottom: 0em;
+    transition: all 250ms;
+
+    padding: 1em 1em;
 }
 
-.note-completion input {
-    width: auto;
-    float: left;
-
+.note-completion:hover {
+    background-color: #eee;
 }
 
-.note-date {
-    clear: both;
+.note-completion i {
+    font-size: 2em;
+    transition: all 250ms;
+}
+
+.note-completion.note-is-completed {
+    color: #333;
+}
+
+.note-completion.note-is-not-completed {
+    color: #ddd;
+}
+
+.note-completion.note-is-not-completed:hover i,
+.note-completion.note-is-completed:hover i
+{
+    transform: scale(1.3);
 }
 
 .note-importance {
     font-weight: bold;
     font-size: larger;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+}
+
+.note-creation-date, .note-due-date {
+    float: right;
+    margin-left: 1em;
+}
+
+.note-creation-date {
+    color: #999;
 }

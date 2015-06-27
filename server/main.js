@@ -3,8 +3,6 @@
  */
 
 var http = require('http');
-var url = require('url');
-var fs = require('fs');
 var Router = require('./Router');
 var noteData = require('./noteStorage');
 var noteSettings = require('./appSettings');
@@ -28,30 +26,27 @@ router.newRoute('GET', '/notes/new', function (req, res, params) {
     res.end(JSON.stringify(note));
 });
 
-
 router.newRoute('GET', '/notes/:id', function (req, res, params) {
     res.statusCode = 200;
-        var note = notes.getNote(params['id']);
+    var note = notes.getNote(params['id']);
     res.end(JSON.stringify(note));
 });
 
 router.newRoute('POST', '/notes', function(req, res, params){
     res.statusCode = 200;
-    var body = '';
+    var newData = {};
     req.on('data', function (data) {
-        body += data.toString()
+        newData = JSON.parse(data.toString());
     });
     req.on('end', function () {
         var newNote = notes.newNote();
-        var newData = JSON.parse(body);
         for (prop in newData) {
            newNote[prop] = newData[prop];
         }
-        console.log(newNote);
         notes.updateNote(newNote);
         res.end("updated");
     });
-})
+});
 
 
 /**
@@ -96,7 +91,6 @@ router.newRoute('PUT', '/settings', function (req, res, params) {
 
 // wildcard that tries to return files from /app if it does not match any other route
 router.newRoute('GET', '.*', router.static);
-
 
 
 var server = http.createServer(router.requestHandler);
