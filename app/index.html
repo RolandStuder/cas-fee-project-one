@@ -6,7 +6,7 @@
   <script src="scripts/thirdParty/handlebars-v3.0.3.js" type="text/javascript"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" name="theme"/>
+  <link rel="stylesheet" name="theme" href="css/style.css"/>
 </head>
 <body>
 <header>
@@ -35,7 +35,7 @@
 
 <script id="noteListTemplate" type="text/x-handlebars-template">
   <section class="notes">
-    {{#each this}}
+    {{#each notes}}
     <div class="note" id="{{id}}">
       <h3>{{title}}</h3>
       <div class="note-completion {{#if completed}}note-is-completed{{else}}note-is-not-completed{{/if}}" id="completed{{id}}">
@@ -48,6 +48,12 @@
       <div class="note-creation-date">Erstellt {{formatDate creationDate}}</div>
     </div>
     {{/each}}
+    {{#unless notes}}
+      <p>
+        No notes to display.
+      </p>
+      {{#if settings.excludeCompletedNotes}}<a class="link" data-action="exclude-completed-notes">Show completed</a>{{/if}}
+    {{/unless}}
   </section>
 </script>
 

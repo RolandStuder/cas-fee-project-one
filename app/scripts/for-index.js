@@ -1,12 +1,11 @@
 var template = {
     render: function () {
         var settings = appSettings.getSettings();
-        themeSwitcher.loadTheme();
         var noteStorage = noteData.noteStorageSingleton.getInstance();
         noteStorage.readNotes(function (notes) {
             notes = orderAndFilterNotes(notes, settings);
             $('header').empty().html(indexHeaderTemplate(settings));
-            $(getMainElement()).empty().html(noteListTemplate(notes));
+            $(getMainElement()).empty().html(noteListTemplate({notes: notes, settings: settings}));
             template.afterRender();
         });
     }
@@ -22,14 +21,17 @@ function orderAndFilterNotes(notes, settings) {
         });
     }
     if (settings.orderBy === appSettings.Settings.orderByDue) {
+        notes.reverse(); // reversing array here to create consistency in display between duedate and creation date. Otherwise later created notes with same duedate are displayed reversed.
         notes.sort(function (note1, note2) {
             // Descending.
+            console.log(note1.due, note2.due);
             return note2.due - note1.due;
         })
     }
     else if (settings.orderBy === appSettings.Settings.orderByCreationDate) {
         notes.sort(function (note1, note2) {
             // Descending.
+            console.log(note1.creationDate, note2.creationDate);
             return note2.creationDate - note1.creationDate;
         })
     }
@@ -161,14 +163,13 @@ function attachEventHandlers(){
 
 // execute on load
 $(function () {
-
     utilities.alertAjaxErrors();
     appSettings.initializeSettings(function () {
+        themeSwitcher.loadTheme();
         initializeHandleBars();
         template.render();
         template.afterRender = function () { //callback function in renderPage
             attachEventHandlers();
-
         };
     })
 });

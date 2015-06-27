@@ -34,7 +34,10 @@ h1, h2, h3 {
 }
 
 h1 {
-    font-size: 1.5em;
+    font-size: 2em;
+    text-transform: uppercase;
+    font-weight: 300;
+
 }
 
 h2 {
@@ -54,6 +57,10 @@ input, textarea {
 a {
     color: inherit;
     text-decoration: inherit;
+}
+
+a.link {
+    color: #3F51B5;
 }
 
 button {

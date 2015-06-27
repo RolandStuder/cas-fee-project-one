@@ -55,3 +55,7 @@ button {
 .no-padding {
   padding: 0em;
 }
+
+.note-completion.note-is-not-completed {
+  color: #ccc;
+}

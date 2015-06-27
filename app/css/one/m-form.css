@@ -45,6 +45,11 @@ input:focus, textarea:focus {
     background-color: #f8f8f8;
 }
 
+input#title {
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
 textarea {
     height: 10em;
 }

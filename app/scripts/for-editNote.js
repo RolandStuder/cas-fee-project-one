@@ -176,6 +176,7 @@ function initialize() {
     function noteAvailable(noteFromStorage) {
         note = noteFromStorage;
         displayNoteDataInForm(note);
+        enableFloatingLabels();
     }
 
     if ('id' in parameters) {
@@ -185,15 +186,13 @@ function initialize() {
         noteStorage.newNote(noteAvailable);
     }
 
-    initializeCommands();
-    enableFloatingLabels();
     appSettings.initializeSettings(function(){
         themeSwitcher.loadTheme('style2');
         $('.header-layout-switcher').on('click',function(){
             themeSwitcher.toggleTheme()
         });
     });
-
+    initializeCommands();
 
     // Button event handlers.
     function backToStartPage() {
