@@ -106,14 +106,14 @@ function parseDateString(dateString) {
  */
 function validate() {
     if ($(titleElement()).val() === "") {
-    //    $('#title-error').html("Titel muss eingegeben werden");
+        $('#title-error').html("Titel muss eingegeben werden");
         titleElement().focus();
         return false;
     }
 
     var dateString = $(dueElement()).val();
     if (parseDateString(dateString) == null) {
-     //   $('#date-error').html("Ungültiges Datum. Erwartetes Format: dd.mm.jjjj, z.B. 23.11.2014");
+        $('#date-error').html("Ungültiges Datum. Erwartetes Format: dd.mm.jjjj, z.B. 23.11.2014");
         dueElement().val("dd.mm.jjjj");
         dueElement().focus();
         return false;

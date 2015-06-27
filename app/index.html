@@ -20,7 +20,7 @@
 <!-- Templates-->
 <script id="indexHeader" type="text/x-handlebars-template">
   <h1><a href="/">Notes</a></h1>
-  <button class="header-button header-layout-switcher"><i class="fa fa-tint"></i> Switch theme</button>
+  <button class="header-button header-layout-switcher"><i class="fa fa-tint"></i> Layout wechseln</button>
   <i class="fa fa-plus header-primary-action" id="new-note"></i>
   <div class="header-commands">
     <div class="header-button-group">
@@ -43,16 +43,16 @@
       </div>
       <div class="note-importance">{{formatImportance importance}}</div>
       <p class="note-description">{{description}}</p>
-      <a href="editNote.html?id={{id}}" class="button">Edit</a>
+      <a href="editNote.html?id={{id}}" class="button">Bearbeiten</a>
       <div class="note-due-date">Fällig {{formatDate due}}</div>
       <div class="note-creation-date">Erstellt {{formatDate creationDate}}</div>
     </div>
     {{/each}}
     {{#unless notes}}
       <p>
-        No notes to display.
+        Keine Notizen zum Anzeigen.
       </p>
-      {{#if settings.excludeCompletedNotes}}<a class="link" data-action="exclude-completed-notes">Show completed</a>{{/if}}
+      {{#if settings.excludeCompletedNotes}}<a class="link" data-action="exclude-completed-notes">Erledigte Notizen anzeigen</a>{{/if}}
     {{/unless}}
   </section>
 </script>
