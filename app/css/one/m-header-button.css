@@ -2,7 +2,6 @@
     float: left;
     display: inline-block;
     color: white;
-    background-color: inherit;
     border: none;
     padding: 1em;
     font-size: 1em;
@@ -14,15 +13,16 @@
 .header-button.is-not-active {
     color: white;
     opacity: 0.5;
-    background-color:  #3F51B5;
+    background-color: #3F51B5;
 }
 
 .header-button.is-active {
     color: white;
     opacity: 1;
+    background-color: #3F51B5;
 }
 
-.header-button:hover {
+.header-button.is-not-active:hover {
     background-color: white;
     color: #3F51B5;
     opacity: 1;
@@ -31,7 +31,7 @@
 .header-button.is-active:hover {
     opacity: 1;
     color: white;
-    background-color: inherit;
+    background-color: #3F51B5;
 }
 
 .header-button input  {

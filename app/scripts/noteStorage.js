@@ -9,6 +9,7 @@
  */
 var noteData = (function () {
     "use strict";
+    var rootUrl = "http://" + window.location.host;
 
     /**
      * Note constructor.
@@ -110,7 +111,7 @@ var noteData = (function () {
      */
     NoteStorage.prototype.readNotes = function (notesCallback) {
 
-        $.get('http://localhost:3000/notes', function (data, status) {
+        $.get(rootUrl+'/notes', function (data, status) {
             if (typeof notesCallback != 'undefined') {
                 var notes = notesStringToNotes(data);
                 notesCallback(notes);
@@ -134,7 +135,7 @@ var noteData = (function () {
      */
     NoteStorage.prototype.getNote = function (id, noteCallback) {
 
-        $.get('http://localhost:3000/notes/' + id, function (data, status) {
+        $.get(rootUrl+'/notes/' + id, function (data, status) {
             if (typeof noteCallback != 'undefined') {
                 var note = noteStringToNote(data);
                 noteCallback(note);
@@ -160,7 +161,7 @@ var noteData = (function () {
         var noteString = JSON.stringify(note);
 
         $.ajax({
-                url: 'http://localhost:3000/notes/' + note.id,
+                url: rootUrl + '/notes/' + note.id,
                 type: 'PUT',
                 data: noteString,
                 success: function (data, textStatus, jqXHR) {
@@ -178,7 +179,7 @@ var noteData = (function () {
      * @param {noteCallback} noteCallback The callback function that is called when the new note is created.
      */
     NoteStorage.prototype.newNote = function (noteCallback) {
-        $.get('http://localhost:3000/notes/new', function (data, status) {
+        $.get(rootUrl+'/notes/new', function (data, status) {
             if (typeof noteCallback != 'undefined') {
                 var note = noteStringToNote(data);
                 noteCallback(note);

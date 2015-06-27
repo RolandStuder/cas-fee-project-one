@@ -9,6 +9,7 @@
  */
 var appSettings = (function () {
     "use strict";
+    var rootUrl = "http://" + window.location.host;
 
     /**
      *
@@ -82,7 +83,7 @@ var appSettings = (function () {
         var settingsString = settingsStringFromSettings(settings);
 
         $.ajax({
-            url: 'http://localhost:3000/settings',
+            url: rootUrl + '/settings',
             type: 'PUT',
             data: settingsString,
             success: function (data, textStatus, jqXHR) {
@@ -102,7 +103,7 @@ var appSettings = (function () {
      */
     function readSettings(settingsCallback) {
         $.ajax({
-                url: 'http://localhost:3000/settings',
+                url: rootUrl + '/settings',
                 type: 'GET',
 
                 success: function (data, textStatus, jqXHR) {
