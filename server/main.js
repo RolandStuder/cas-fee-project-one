@@ -34,8 +34,14 @@ router.newRoute('GET', '/notes/:id', function (req, res, params) {
  */
 router.newRoute('POST', '/notes', function (req, res, params) {
     res.statusCode = 200;
-    var note = notes.createNote(); // need to read post data here
-    res.end(JSON.stringify(note));
+    var body = '';
+    req.on('data', function (data) {
+        body += data.toString()
+    });
+    req.on('end', function () {
+        notes.updateNote(noteData.stringToNote(body));
+        res.end("updated");
+    });
 });
 
 
@@ -49,7 +55,6 @@ router.newRoute('PUT', '/notes/:id', function (req, res, params) {
         body += data.toString()
     });
     req.on('end', function () {
-//        console.log(body);
         notes.updateNote(noteData.stringToNote(body));
         res.end("updated");
 
