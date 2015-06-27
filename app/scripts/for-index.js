@@ -24,14 +24,12 @@ function orderAndFilterNotes(notes, settings) {
         notes.reverse(); // reversing array here to create consistency in display between duedate and creation date. Otherwise later created notes with same duedate are displayed reversed.
         notes.sort(function (note1, note2) {
             // Descending.
-            console.log(note1.due, note2.due);
             return note2.due - note1.due;
         })
     }
     else if (settings.orderBy === appSettings.Settings.orderByCreationDate) {
         notes.sort(function (note1, note2) {
             // Descending.
-            console.log(note1.creationDate, note2.creationDate);
             return note2.creationDate - note1.creationDate;
         })
     }
@@ -139,7 +137,6 @@ function attachEventHandlers(){
 
     $("[data-action='exclude-completed-notes']").on('click', function(){
         toggleExcludeCompletedNotes();
-        console.log('click');
     });
 
     $('.note-completion').on('click', function (event) {
