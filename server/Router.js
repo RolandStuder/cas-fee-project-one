@@ -2,30 +2,25 @@
  * Created by rstuder on 11.06.15.
  */
 
-/*
- Create new Routes as
- var router = new Router();
- router.newRoute('GET', '/something/:id', function(){
- // do stuff
- });
-
- TYPE OF REQUEST IS NOT IMPLEMENTED YET
- */
-
 var url = require('url');
+var path = require('path');
+
 
 
 function Router(){
     var routes =  [];
 
+    /**
+     * Creates a new Route with a callback
+     * Router are defined like Router.newRoute('GET', '/notes/:id'/, function(req,res,params)
+     * Callback is called with params object which returns matched parameters for example for /notes/16 it contains {"id": "16"}
+     */
     var newRoute = function (method, pattern, fn) {
         var route = {method: method, pattern: getExtractionPattern(pattern), callback: fn};
         routes.push(route);
     };
 
     var requestHandler = function (req, res) {
-
-
         var pathname = url.parse(req.url).pathname;
 
         for (var i = 0; i < routes.length; i++) {
@@ -38,13 +33,42 @@ function Router(){
         }
     };
 
+    /**
+     * Delivers static files from /app to client
+     */
+    var static = function (req, res, params) {
+        var pathname = url.parse(req.url).pathname;
+        if (pathname === '/') {
+            pathname = '/index.html'
+        }
+        pathname = path.join('..', 'app', pathname);
+
+        res.statusCode = 200;
+
+        var extension = path.extname(pathname);
+        if (extension === '.css') {
+            res.setHeader("Content-Type", 'text/css');
+        }
+        else if (extension === '.js') {
+            res.setHeader("Content-Type", 'text/javascript');
+        }
+        else if (extension === '.html') {
+            res.setHeader("Content-Type", 'text/html');
+        }
+        var readStream = fs.createReadStream(pathname);
+        readStream.on('error', function (error) {
+            res.statusCode = 404;
+            res.end(error.toString());
+        });
+        readStream.pipe(res);
+    };
+
     return {
         newRoute: newRoute,
+        static: static,
         requestHandler: requestHandler
     };
 }
-
-
 
 
 function getExtractionPattern (pattern) {

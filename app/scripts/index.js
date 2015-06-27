@@ -38,7 +38,7 @@ function orderAndFilterNotes(notes, settings) {
         notes = notes.filter(function (note) {
             return !note.completed;
         });
-    } 
+    }
     if (settings.orderBy === appSettings.Settings.orderByDue) {
         notes.sort(function (note1, note2) {
             // Descending.
