@@ -173,12 +173,12 @@ var noteData = (function () {
     };
 
     /**
-     * Creates a new note with a unique id.
+     * Creates a new note with a unique id without writing it to the db.
      *
      * @param {noteCallback} noteCallback The callback function that is called when the new note is created.
      */
-    NoteStorage.prototype.createNote = function (noteCallback) {
-        $.post('http://localhost:3000/notes', function (data, status) {
+    NoteStorage.prototype.newNote = function (noteCallback) {
+        $.get('http://localhost:3000/notes/new', function (data, status) {
             if (typeof noteCallback != 'undefined') {
                 var note = noteStringToNote(data);
                 noteCallback(note);

@@ -1,7 +1,6 @@
 var template = {
     render: function () {
         var settings = appSettings.getSettings();
-        console.log(settings);
         themeSwitcher.loadTheme();
         var noteStorage = noteData.noteStorageSingleton.getInstance();
         noteStorage.readNotes(function (notes) {

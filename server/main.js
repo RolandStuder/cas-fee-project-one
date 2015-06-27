@@ -19,31 +19,43 @@ router.newRoute('GET', '/notes', function (req, res, params) {
     res.end(JSON.stringify(notes.readNotes()));
 });
 
+/**
+ * Creates a new without writing it to the database.
+ */
+router.newRoute('GET', '/notes/new', function (req, res, params) {
+    res.statusCode = 200;
+    var note = notes.newNote();
+    res.end(JSON.stringify(note));
+});
+
+
 router.newRoute('GET', '/notes/:id', function (req, res, params) {
     res.statusCode = 200;
         var note = notes.getNote(params['id']);
     res.end(JSON.stringify(note));
 });
 
-
-/**
- * Creates a new note.
- */
-router.newRoute('POST', '/notes', function (req, res, params) {
+router.newRoute('POST', '/notes', function(req, res, params){
     res.statusCode = 200;
     var body = '';
     req.on('data', function (data) {
         body += data.toString()
     });
     req.on('end', function () {
-        notes.updateNote(noteData.stringToNote(body));
+        var newNote = notes.newNote();
+        var newData = JSON.parse(body);
+        for (prop in newData) {
+           newNote[prop] = newData[prop];
+        }
+        console.log(newNote);
+        notes.updateNote(newNote);
         res.end("updated");
     });
-});
+})
 
 
 /**
- * Updates a note
+ * Updates a note, also used to put new notes
  */
 router.newRoute('PUT', '/notes/:id', function (req, res, params) {
     res.statusCode = 200;

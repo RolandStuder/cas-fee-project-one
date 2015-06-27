@@ -182,14 +182,13 @@ function initialize() {
         noteStorage.getNote(Number(parameters.id), noteAvailable);
     }
     else {
-        note = noteStorage.createNote(noteAvailable);
+        noteStorage.newNote(noteAvailable);
     }
 
 
     initializeCommands();
     enableFloatingLabels();
     appSettings.initializeSettings(function(){
-        var settings = appSettings.getSettings();
         themeSwitcher.loadTheme('style2');
         $('.header-layout-switcher').on('click',function(){
             themeSwitcher.toggleTheme()

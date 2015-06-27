@@ -162,7 +162,7 @@ var noteData = (function () {
      *
      * @returns {Note} The new note.
      */
-    NoteStorage.prototype.createNote = function () {
+    NoteStorage.prototype.newNote = function () {
 
         var self = this;
         function getNextId() {
