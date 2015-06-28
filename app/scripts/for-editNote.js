@@ -87,7 +87,7 @@ function parseDateString(dateString) {
             date.setFullYear(dateElements[2]);
             date.setMonth(dateElements[1] - 1);
             date.setDate(dateElements[0]);
-            if(date.getFullYear() != dateElements[2] || date.getMonth() != dateElements[1] -1 || date.getDate() != dateElements[0])
+            if(date.getFullYear() != dateElements[2] || date.getMonth() != dateElements[1] -1 || date.getDate() != dateElements[0] || date.getFullYear() < 2000)
             {
                 date = null;
             }

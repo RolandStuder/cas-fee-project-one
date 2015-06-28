@@ -23,5 +23,5 @@ The note tool exposes the following API:
     GET /notes - Returns an JSON array of notes 
     GET /notes/12 - Returns the note with the corresponding ID as JSON
     POST /notes - Creates a new note
-    PUT /notes/12 - Overwrites a note with the new datat
+    PUT /notes/12 - Overwrites a note with the new data
 
