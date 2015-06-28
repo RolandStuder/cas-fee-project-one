@@ -7,7 +7,14 @@
 
 ## Running instructions
 
+Server:
 Node working directory should be set to `/server`. Then run `main.js`.
+
+App:
+Start with http://localhost:3000/
+
+App is tested with IE 11 and Chrome 43.
+
 
 ## Note API
 
