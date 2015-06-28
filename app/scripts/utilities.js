@@ -50,7 +50,13 @@ var utilities = (function() {
 
     }
 
-    function alertAjaxErrors() {
+    function initializeAjax() {
+        $.ajaxSetup({
+            // Disable caching of AJAX responses.
+            cache: false
+        });
+
+        // alert ajax errors.
         $(document).ajaxError(function( event, jqxhr, settings, thrownError ) {
             if(thrownError || jqxhr.status) {
                 alert(thrownError + ", status: " + jqxhr.status);
@@ -61,7 +67,10 @@ var utilities = (function() {
     return {
         padLeft : padLeft,
         getParametersFromQueryString : getParametersFromQueryString,
-        alertAjaxErrors : alertAjaxErrors
+        /**
+         * Initialization of global ajax settings (error handling, caching).
+         */
+        initializeAjax : initializeAjax
     }
 
 }());

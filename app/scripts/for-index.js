@@ -147,8 +147,8 @@ function attachEventHandlers(){
         noteStorage.getNote(id, function (note) {
             note.completed = !note.completed;
             noteStorage.updateNote(note, function (note) {
+                template.render();
             });
-            template.render();
         });
     });
 
@@ -160,7 +160,7 @@ function attachEventHandlers(){
 
 // execute on load
 $(function () {
-    utilities.alertAjaxErrors();
+    utilities.initializeAjax();
     appSettings.initializeSettings(function () {
         themeSwitcher.loadTheme();
         initializeHandleBars();

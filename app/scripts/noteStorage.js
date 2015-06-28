@@ -45,15 +45,6 @@ var noteData = (function () {
      * @constructor
      */
     function NoteStorage() {
-
-
-// Private stuff.
-        $.ajaxSetup({
-            // Disable caching of AJAX responses.
-            cache: false
-        });
-
-
     }
 
     /**

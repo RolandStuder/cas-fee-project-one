@@ -46,6 +46,20 @@ var noteData = (function () {
 
 
     /**
+     * Initialized a note with the properties of a source note (Except the id which is not overwritten).
+     *
+     * @param {Note} sourceNote  The source note.
+     */
+    Note.prototype.initializeFromNote = function(sourceNote) {
+        for (var prop in sourceNote) {
+            if(prop !== 'id') {
+                this[prop] = sourceNote[prop];
+            }
+        }
+    };
+
+
+    /**
      * Converts a JSON note string to an instance of the Note class.
      *
      * @param {string} noteString

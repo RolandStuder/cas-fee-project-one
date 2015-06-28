@@ -212,8 +212,8 @@ function initialize() {
 $(function () {
         try {
 
-            // Alert ajax errors.
-            utilities.alertAjaxErrors();
+            // Initialize ajax.
+            utilities.initializeAjax();
 
             // Initialize page.
             initialize();

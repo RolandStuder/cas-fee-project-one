@@ -32,17 +32,16 @@ router.newRoute('GET', '/notes/:id', function (req, res, params) {
     res.end(JSON.stringify(note));
 });
 
-router.newRoute('POST', '/notes', function(req, res, params){
+router.newRoute('POST', '/notes', function (req, res, params) {
     res.statusCode = 200;
-    var newData = {};
+    var body = '';
     req.on('data', function (data) {
-        newData = JSON.parse(data.toString());
+        body += data.toString()
     });
     req.on('end', function () {
         var newNote = notes.newNote();
-        for (prop in newData) {
-           newNote[prop] = newData[prop];
-        }
+        var postedNote = JSON.parse(noteData.stringToNote(body));
+        newNote.initializeFromNote(postedNote);
         notes.updateNote(newNote);
         res.end("updated");
     });
